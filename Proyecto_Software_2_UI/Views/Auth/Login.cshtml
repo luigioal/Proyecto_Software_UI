@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = "_AuthLayout";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Iniciar sesión</h2>
+                    <!-- Error Alert general -->
+                    <div class="alert alert-danger d-none" id="error-message" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Correo o contraseña que ingresaste es invalida o incorrecta.
+                    </div>
+                    <form id="loginForm" data-validacion="auto">
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="input-email" class="form-label">Correo electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control" id="input-email" name="email" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        </div>
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="input-password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="input-password" name="password" required>
+                            </div>
+                        </div>
+                        <!-- Forgot Password Link -->
+                        <div class="mb-4">
+                            <a href="#" class="text-decoration-none">¿Olvidaste la contraseña?</a>
+                        </div>
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Iniciar sesión</button>
+                        </div>
+                        <!-- Create Account Link -->
+                        <div class="text-center mt-4">
+                            <span>¿No tienes una cuenta?</span>
+                            <a href="#" class="text-decoration-none ms-2">Crear cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/Shared/Utils/FormValidator.js"></script>
+    <script src="~/js/Pages/Auth/LoginView.js"></script>
+}
