@@ -7,15 +7,15 @@
 const FormValidator = {
     // Configuración de validaciones
     validaciones: {
-        'email': {
+        'email': { // Verifica formato válido de correo electrónico mediante regex
             regex: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
             mensaje: 'Por favor, ingresa un correo electrónico válido'
         },
-        'password': {
+        'password': { // Requiere mínimo 8 caracteres con letras y números
             regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
             mensaje: 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
         },
-        'nombre': {
+        'nombre': { //Acepta letras, acentos y espacios (2-50 caracteres)
             regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/,
             mensaje: 'Por favor, ingresa un nombre válido'
         },
@@ -23,15 +23,15 @@ const FormValidator = {
             regex: /^\d{8,15}$/,
             mensaje: 'Por favor, ingresa un número de teléfono válido'
         },
-        'fecha': {
+        'fecha': { //Comprueba formato YYYY-MM-DD
             regex: /^\d{4}-\d{2}-\d{2}$/,
             mensaje: 'Usa el formato YYYY-MM-DD'
         },
-        'numero': {
+        'numero': { //Permite solo dígitos
             regex: /^\d+$/,
             mensaje: 'Por favor, ingresa solo números'
         },
-        'requerido': {
+        'requerido': { //Comprueba que el campo no esté vacío
             condicion: (valor) => valor.trim() !== '',
             mensaje: 'Este campo es obligatorio'
         }
@@ -81,7 +81,7 @@ const FormValidator = {
             errorContainer = document.createElement('div');
             errorContainer.id = `error-${input.id}`;
             errorContainer.className = 'invalid-feedback';
-            input.parentNode.appendChild(errorContainer);
+            input.parentNode.appendChild(errorContainer); // Aqui  define donde agregar el contenedor. Se añade como último hijo del elemento padre. 
         }
 
         if (!esValido) {
