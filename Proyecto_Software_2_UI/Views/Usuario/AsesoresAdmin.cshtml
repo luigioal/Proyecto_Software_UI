@@ -1,0 +1,145 @@
+﻿@section Scripts {
+    <script src="~/js/Pages/Vacation/CreateVacation.js"></script>
+}
+
+<div class="container mt-4">
+    <style>
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-check-input.custom-switch {
+            width: 3rem;
+            height: 1.5rem;
+        }
+
+        .asesor-row {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            align-items: center;
+        }
+
+        .titulo-principal {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .encabezado {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-registrar {
+            background-color: #e9f5e9;
+            color: #212529;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+        }
+    </style>
+    <div class="row">
+        <div class="col-12">
+            <div class="titulo-principal">Asesores</div>
+
+            <!-- Encabezados -->
+            <div class="row mb-2 encabezado px-3">
+                <div class="col-4">
+                    <!-- Espacio para nombre de asesor -->
+                </div>
+                <div class="col-2 text-center">clientes</div>
+                <div class="col-2 text-center">comisiones</div>
+                <div class="col-2 text-center">Último acceso</div>
+                <div class="col-1 text-center">Modificar</div>
+                <div class="col-1 text-center">Activo</div>
+            </div>
+
+            <!-- Asesor 1 -->
+            <div class="row asesor-row">
+                <div class="col-4 d-flex align-items-center">
+                    <div class="avatar-circle me-3">
+                        <i>
+                            <img class="avatar-circle"  src="https://randomuser.me/api/portraits/men/34.jpg" />
+                        </i>
+                    </div>
+                    <span class="fw-bold">Nombre de asesor</span>
+                </div>
+                <div class="col-2 text-center">23</div>
+                <div class="col-2 text-center">$183</div>
+                <div class="col-2 text-center">01/01/2025</div>
+                <div class="col-1 text-center">
+                    <button class="btn btn-sm btn-light">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
+                <div class="col-1 text-center">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input custom-switch" type="checkbox" role="switch">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asesor 2 -->
+            <div class="row asesor-row">
+                <div class="col-4 d-flex align-items-center">
+                    <div class="avatar-circle me-3">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <span class="fw-bold">Nombre de asesor</span>
+                </div>
+                <div class="col-2 text-center">5</div>
+                <div class="col-2 text-center">$2833</div>
+                <div class="col-2 text-center">01/01/2025</div>
+                <div class="col-1 text-center">
+                    <button class="btn btn-sm btn-light">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
+                <div class="col-1 text-center">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input custom-switch" type="checkbox" role="switch" checked>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asesor 3 -->
+            <div class="row asesor-row">
+                <div class="col-4 d-flex align-items-center">
+                    <div class="avatar-circle me-3">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <span class="fw-bold">Nombre de asesor</span>
+                </div>
+                <div class="col-2 text-center">34</div>
+                <div class="col-2 text-center">$50</div>
+                <div class="col-2 text-center">01/01/2025</div>
+                <div class="col-1 text-center">
+                    <button class="btn btn-sm btn-light">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
+                <div class="col-1 text-center">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input custom-switch" type="checkbox" role="switch">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón Registrar -->
+            <div class="mt-4">
+                <button class="btn btn-registrar">
+                    registrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
