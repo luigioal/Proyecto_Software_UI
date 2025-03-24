@@ -1,0 +1,53 @@
+﻿.user-management-component {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.user-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:disabled {
+    opacity: 1;
+}
+
+.form-switch .form-check-input {
+    width: 40px;
+    height: 20px;
+}
+
+    .form-switch .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+/* Estilo para filas alternas */
+.user-rows .row:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Estilo para hover en las filas */
+.user-rows .row:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.2s;
+}
+
+/* Estilo para el botón de editar */
+.btn-outline-secondary {
+    border-color: #ced4da;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
