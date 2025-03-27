@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <div class="user-mgmt-checkbox-container">
                     <label class="user-mgmt-toggle-switch">
-                        <input type="checkbox" class="toggle-activo" checked>
-                        <span class="user-mgmt-slider toggle-activo"></span>
+                        <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : "unchecked"}>
+                        <span class="user-mgmt-slider "></span>
                     </label>
                 </div>
             `;
@@ -140,10 +140,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Agregar event listeners a los toggles de activación
         document.querySelectorAll('.toggle-activo').forEach(toggle => {
             toggle.addEventListener('change', (e) => {
-                const userName = e.currentTarget.querySelector('.user-mgmt-name').textContent.trim();
-                const userId = e.currentTarget.getAttribute('data-id');
-                const nuevoEstado = e.currentTarget.checked;
-                cambiarEstadoUsuario(userId, userName, nuevoEstado);
+                e.preventDefault();
+                cambiarEstadoUsuario(e.currentTarget);
             });
         });
 
@@ -261,11 +259,15 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
     // Función para cambiar el estado activo/inactivo de un usuario
-    async function cambiarEstadoUsuario(userId, userName, nuevoEstado) {
-        const actionText = isActive ? 'desactivar' : 'activar';
+    async function cambiarEstadoUsuario(entity) {
+        const row = entity.closest('.user-mgmt-row');
+        const userName = row.querySelector('.user-mgmt-name').textContent.trim();
+        const userId = row.querySelector('.user-mgmt-id').textContent.trim();
+
+        const actionText = !entity.checked ? 'desactivar' : 'activar';
 
         Swal.fire({
-            title: `¿${nuevoEstado ? 'Desactivar' : 'Activar'} la cuenta de ${userName}?`,
+            title: `¿${actionText.charAt(0).toUpperCase() + actionText.slice(1)} la cuenta de ${userName}?`,
             html: `¿Estás seguro que deseas ${actionText} la cuenta de <b>${userName}</b>?`,
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
@@ -277,20 +279,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                //Enviar instruccion al backend sobre el rol del usuario
+                //Enviar instruccion al backend para cambiar estado del usuario
                 var api_url = "http://localhost:5058/";
-                console.log(userId, roleName);
+                entity.checked = entity.checked;
                 $.ajax({
-                    url: api_url + `api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
+                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${entity.checked}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.classList.toggle('user-mgmt-checkbox-active');
                     Swal.fire({
                         title: 'Completado',
-                        html: `La cuenta de ${userName} ha sido ${isActive ? 'deactivada' : 'activada'} correctamente.`,
+                        html: `La cuenta de ${userName} ha sido ${!entity.checked ? 'deactivada' : 'activada'} correctamente.`,
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
-                        timer: 2000,
+                        timer: 3500,
                         timerProgressBar: true,
                         customClass: {
                             confirmButton: 'checkbox-custom-confirm-button'
@@ -303,6 +305,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon: "error"
                     })
                 })
+            }
+            else {
+                entity.checked = !entity.checked;
             }
         });
     }
