@@ -4,7 +4,7 @@ namespace Proyecto_Software_2_UI.Controllers
 {
     public class UsuarioController : Controller
     {
-        public IActionResult AsesoresAdmin()
+        public IActionResult UsuariosAdmin()
         {
             return View();
         }
