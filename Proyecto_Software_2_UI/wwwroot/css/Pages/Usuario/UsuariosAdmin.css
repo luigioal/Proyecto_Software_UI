@@ -13,7 +13,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 800px;
+    height: 700px;
     margin: 20px auto;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -23,6 +23,7 @@
 
 .user-mgmt-header {
     display: grid;
+    border-radius: 12px;
     grid-template-columns: 0.8fr 2.2fr repeat(6, 1fr);
     padding: 25px 20px;
     border-bottom: 1px solid #e5e7eb;
@@ -62,6 +63,7 @@
         }
 
 .user-mgmt-content {
+    height: 80%;
     overflow-y: auto;
     flex-grow: 1;
 }
@@ -234,15 +236,15 @@ input:checked + .user-mgmt-slider {
 .user-mgmt-footer {
     padding: 20px;
     border-top: 1px solid #e5e7eb;
-    background-color: none;
+    background-color: white;
     position: sticky;
     bottom: 0;
-    z-index: 10;
+    z-index: 15;
 }
 
 .user-mgmt-register-button {
-/*    background-color: #333333;*/
-/*    color: #ffffff;*/
+    background-color: #188754;
+    color: #ffffff;
     border: 1px solid #222222;
     border-radius: 6px;
     padding: 10px 20px;
@@ -256,6 +258,7 @@ input:checked + .user-mgmt-slider {
 }
 
     .user-mgmt-register-button:hover {
+        text-decoration: none;
         background-color: #222222;
         border-color: #111111;
     }
