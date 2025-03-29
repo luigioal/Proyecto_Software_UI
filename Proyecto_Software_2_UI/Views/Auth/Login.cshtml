@@ -35,7 +35,7 @@
                         </div>
                         <!-- Forgot Password Link -->
                         <div class="mb-4">
-                            <a href="#" class="text-decoration-none">¿Olvidaste la contraseña?</a>
+                            <a asp-controller="Auth" asp-action="RecuperarContrasena" class="text-decoration-none">¿Olvidaste la contraseña?</a>
                         </div>
                         <!-- Submit Button -->
                         <div class="d-grid">
@@ -44,7 +44,7 @@
                         <!-- Create Account Link -->
                         <div class="text-center mt-4">
                             <span>¿No tienes una cuenta?</span>
-                            <a href="#" class="text-decoration-none ms-2">Crear cuenta</a>
+                            <a asp-controller="Auth" asp-action="RegistroAsesor" class="text-decoration-none ms-2">Crear cuenta</a>
                         </div>
                     </form>
                 </div>
@@ -55,5 +55,6 @@
 @section Scripts {
     <script src="~/js/Shared/Utils/FormValidator.js"></script>
     <script src="~/js/Pages/Auth/LoginView/Login.js"></script>
+    
     
 }
