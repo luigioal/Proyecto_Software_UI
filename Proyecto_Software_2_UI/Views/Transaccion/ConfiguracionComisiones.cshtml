@@ -1,0 +1,87 @@
+﻿@section Scripts {
+    <script src="~/js/Pages/Transaccion/ConfiguracionComisiones.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pages/Transaccion/ConfiguracionComisiones.css" />
+}
+
+
+<div class="settings-panel">
+    <h2 class="settings-title">Comisiones</h2>
+
+    <div class="settings-form">
+        <div class="settings-row">
+            <label class="settings-label">Comision de plataforma por transaccion</label>
+            <div class="settings-symbol">%</div>
+            <input type="text" class="settings-value" value="4" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <label class="settings-label">Tarifa minima por transaccion</label>
+            <div class="settings-symbol">$</div>
+            <input type="text" class="settings-value" value="5" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <label class="settings-label">Impuesto sobre ganancias</label>
+            <div class="settings-symbol">%</div>
+            <input type="text" class="settings-value" value="13" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <label class="settings-label">Comision de asesor por transaccion</label>
+            <div class="settings-symbol">%</div>
+            <input type="text" class="settings-value" value="3" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <label class="settings-label">Comision de asesor por venta (ganancia)</label>
+            <div class="settings-symbol">%</div>
+            <input type="text" class="settings-value" value="3" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <label class="settings-label">Comision de asesor por venta (perdida)</label>
+            <div class="settings-symbol">%</div>
+            <input type="text" class="settings-value" value="2" readonly>
+            <div class="settings-edit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Spacer div to maintain height -->
+        <div style="height: 84px;"></div>
+    </div>
+
+    <div class="settings-button-container">
+        <button class="settings-button">guardar</button>
+    </div>
+</div>
