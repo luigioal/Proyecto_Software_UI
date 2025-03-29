@@ -227,9 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         confirmButtonText: 'Aceptar',
                         timer: 2000,
                         timerProgressBar: true,
-                        customClass: {
-                            confirmButton: 'checkbox-custom-confirm-button'
-                        }
                     });
                 }).fail(function () {
                     Swal.fire({
