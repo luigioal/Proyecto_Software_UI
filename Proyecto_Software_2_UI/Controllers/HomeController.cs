@@ -12,7 +12,7 @@ namespace Proyecto_Software_2_UI.Controllers
         {
             _logger = logger;
         }
-
+        
         public IActionResult Index()
         {
             return View();

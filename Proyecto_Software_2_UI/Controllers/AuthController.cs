@@ -8,5 +8,6 @@ namespace Proyecto_Software_2_UI.Controllers
         {
             return View();
         }
+
     }
 }
