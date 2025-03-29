@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Nueva contraseña";
+    Layout = "_AuthLayout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h4 class="mb-3 text-center">Nueva contraseña</h4>
+
+                    <form id="form-cambiar-contrasena">
+                        <input type="hidden" id="input-correo" value="@ViewBag.Correo" />
+
+                        <div class="mb-3">
+                            <label for="input-nueva-contrasena" class="form-label">Nueva contraseña</label>
+                            <input type="password" class="form-control" id="input-nueva-contrasena" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="input-confirmar-contrasena" class="form-label">Confirmar contraseña</label>
+                            <input type="password" class="form-control" id="input-confirmar-contrasena" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Cambiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Shared/Utils/FormValidator.js"></script>
+    <script src="~/js/Pages/Auth/Contrasena/CambiarContrasena.js"></script>
+}

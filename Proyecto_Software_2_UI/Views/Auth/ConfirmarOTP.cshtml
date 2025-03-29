@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Confirmar código";
+    Layout = "_AuthLayout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h4 class="mb-3 text-center">Confirmar código</h4>
+
+                    <form id="form-confirmar-otp">
+                        <input type="hidden" id="input-correo" name="correo" value="@ViewBag.Correo" />
+
+                        <div class="mb-3">
+                            <label for="input-otp" class="form-label">Código OTP</label>
+                            <input type="text" class="form-control" id="input-otp" name="otp" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Validar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Shared/Utils/FormValidator.js"></script>
+    <script src="~/js/Pages/Auth/Contrasena/ConfirmarOtp.js"></script>
+}
