@@ -19,6 +19,7 @@ function Login() {
 
     this.SubmitLoginRequests = function () {
         let email = $('#input-email').val();
+        let pass = $('#input-password').val();
         $.ajax({
             method: "POST",
             url: api_url + "/api/Usuario/BuscarUsuarioPorEmail?email=" + encodeURIComponent(email),
@@ -40,7 +41,7 @@ function Login() {
             }
 
             // Si encontramos el usuario, procedemos a validar las credenciales
-            this.validarUsuario(email, $('#input-password').val());
+            this.validarPassword(email, pass);
         }.bind(this)).fail(function (error) {
             console.log("BuscarUsuario - ERROR!:", error);
             Swal.fire({
@@ -51,14 +52,14 @@ function Login() {
         });
     }
 
-    this.validarUsuario = function (email, contrasena) {
+    this.validarPassword = function (email, contrasena) {
         console.log("Intentando validar con:", email, contrasena);
         $.ajax({
             method: "POST",
             url: api_url + "/api/Usuario/ValidarUsuario?email=" + encodeURIComponent(email) + "&contrasena=" + encodeURIComponent(contrasena),
             contentType: "application/json;charset=utf-8"
         }).done(function (response) {
-            console.log("ValidarUsuario - Success!", response);
+            console.log("validarPassword - Success!", response);
             
 
             // Usuario autenticado correctamente, ahora generamos OTP
@@ -69,13 +70,13 @@ function Login() {
             } else {
                 Swal.fire({
                     title: "Credenciales incorrectas",
-                    text: "Correo electrónico o contraseña incorrectos",
+                    text: "Correo electrónico o contraseña incorrectos, response = false",
                     icon: "error"
                 });
             }
 
         }.bind(this)).fail(function (error) {
-            console.log("ValidarUsuario - ERROR!:", error);
+            console.log("validarPassword - ERROR!:", error);
             Swal.fire({
                 title: "Error de autenticación",
                 text: "BackendError",
@@ -85,25 +86,24 @@ function Login() {
     }
 
     this.generarOTP = function (email) {
-        // Crear el objeto de solicitud
-        const requestBody = JSON.stringify({ email: email });
+
 
         $.ajax({
             method: "POST",
-            url: api_url + "/api/Seguridad/GenerarOTP",
+            url: api_url + "/api/Seguridad/GenerarOTP?email=" + encodeURIComponent(email),
             contentType: "application/json;charset=utf-8",
-            data: requestBody
         }).done(function (response) {
             console.log("GenerarOTP - Success!", response);
 
             if (response && response.success) {
                 // Redireccionar a la página de OTP
-                window.location.href = "Auth/OTP";
+                //window.location.href = "Auth/OTP";
+                console.log("REDIRECTING TO AUTH PAGE");
             } else {
                 // Manejar caso de error en la respuesta
                 Swal.fire({
                     title: "Error al generar OTP",
-                    text: response.message || "No se pudo generar el código de verificación",
+                    text: response.message || "No se pudo generar el código de verificación, pero se hizo el llamado",
                     icon: "error"
                 });
             }
@@ -111,7 +111,7 @@ function Login() {
             console.log("GenerarOTP - ERROR!:", error);
             Swal.fire({
                 title: "Error de autenticación",
-                text: "No se pudo generar el código de verificación",
+                text: "No se pudo generar el código de verificación, fallo el llamado",
                 icon: "error"
             });
         });
