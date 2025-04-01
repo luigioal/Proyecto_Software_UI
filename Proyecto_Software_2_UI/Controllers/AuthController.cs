@@ -39,9 +39,10 @@ namespace Proyecto_Software_2_UI.Controllers
 
         // vista de confirmación del OTP
         [HttpGet]
-        public IActionResult ConfirmarOTP(string correo)
+        public IActionResult ConfirmarOTP(string correo, string origen)
         {
             ViewBag.Correo = correo;
+            ViewBag.Origen = origen;
             return View();
         }
 
