@@ -1,9 +1,7 @@
-﻿@section Scripts {
-    <script src="~/js/Pages/Usuario/UsuariosAdmin.js"></script>
-}
-
+﻿
 @section Styles {
     <link rel="stylesheet" href="~/css/Pages/Usuario/UsuariosAdmin.css"/>
+    <link rel="stylesheet" href="~/css/Pages/Auth/RegistroUsuariosModal.css" />
 }
 
 <!-- User Management Component -->
@@ -25,6 +23,14 @@
     </div>
 
     <div class="user-mgmt-footer">
-        <button class="user-mgmt-register-button">Registrar</button>
+        <button id="btn-registrar" class="user-mgmt-register-button">Registrar</button>
     </div>
 </div>
+
+@await Html.PartialAsync("~/Views/Auth/RegistroUsuariosModal.cshtml")
+
+@section Scripts {
+    <script src="~/js/Pages/Usuario/UsuariosAdmin.js"></script>
+    <script src="~/js/Shared/Utils/FormValidator.js"></script>
+    <script src="~/js/Pages/Auth/RegistroView/RegistroUsuariosModal.js"></script>
+}

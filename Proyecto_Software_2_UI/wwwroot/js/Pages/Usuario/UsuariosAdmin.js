@@ -72,16 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Función para renderizar los usuarios en el componente
     function renderUsuarios(usuarios) {
         userRowsContainer.innerHTML = '';
 
         if (!usuarios || usuarios.length === 0) {
             userRowsContainer.innerHTML = `
-                <div class="text-center py-4 text-secondary">
-                    No se encontraron usuarios para mostrar.
-                </div>
-            `;
+            <div class="text-center py-4 text-secondary">
+                No se encontraron usuarios para mostrar.
+            </div>
+        `;
             return;
         }
 
@@ -96,40 +95,56 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             row.innerHTML = `
-                <div class="user-mgmt-id">${usuario.id}</div>
-                <div class="user-mgmt-name">
-                    <div class="user-mgmt-avatar">
-                        <img src="${usuario.fotoPerfil}">
-                    </div>
-                    ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
+            <div class="user-mgmt-id">${usuario.id}</div>
+            <div class="user-mgmt-name">
+                <div class="user-mgmt-avatar">
+                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""}>
                 </div>
-                <div class="user-mgmt-checkbox-container">
-                    <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
-                </div>
-                <div class="user-mgmt-checkbox-container">
-                    <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
-                </div>
-                <div class="user-mgmt-checkbox-container">
-                    <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
-                </div>
-                <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
-                <div class="user-mgmt-edit-icon">
+                ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
+            </div>
+
+            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}" >
+                <span class="user-mgmt-custom-checkbox text-muted ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
+                </span>
+            </div>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            </div>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            </div>
+
+            <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
+            <div class="user-mgmt-edit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+            </div>
+            <div class="user-mgmt-actions-container">
+                <label class="user-mgmt-toggle-switch">
+                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""}>
+                    <span class="user-mgmt-slider"></span>
+                </label>
+                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                     </svg>
                 </div>
-                <div class="user-mgmt-checkbox-container">
-                    <label class="user-mgmt-toggle-switch">
-                        <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : "unchecked"}>
-                        <span class="user-mgmt-slider "></span>
-                    </label>
-                </div>
-            `;
+            </div>
+        `;
 
             userRowsContainer.appendChild(row);
         });
 
-        // Agregar event listeners a los botones de edición
+        document.querySelectorAll('.user-mgmt-row').forEach(row => {
+            const stateReference = row.querySelector('.toggle-activo');
+            if (!stateReference.checked) {
+                row.addEventListener("mouseenter", makeVisible);
+                row.addEventListener('mouseleave', makeInvisible);
+            }
+        })
+
+        // Add the event listeners as before
         document.querySelectorAll('.btn-editar').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const userId = e.currentTarget.getAttribute('data-id');
@@ -137,24 +152,50 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Agregar event listeners a los toggles de activación
         document.querySelectorAll('.toggle-activo').forEach(toggle => {
-            toggle.addEventListener('change', (e) => {
+            toggle.addEventListener('click', (e) => {
                 e.preventDefault();
                 cambiarEstadoUsuario(e.currentTarget);
             });
         });
 
-        // Agregar event listeners a los checkbox de roles
         document.querySelectorAll('.user-mgmt-custom-checkbox').forEach(checkbox => {
             checkbox.addEventListener('click', function (e) {
-                // Prevent the default action
                 e.preventDefault();
-                definirRolUsuario(e.currentTarget);
+                const row = e.currentTarget.closest('.user-mgmt-row');
+                const isActive = row.querySelector('.toggle-activo').checked;
+                if (isActive) {
+                    definirRolUsuario(e.currentTarget);
+                }
             });
         });
 
-        // Función para formatear la fecha
+        // Add event listener for delete bucket icon
+        document.querySelectorAll('.user-mgmt-delete-icon').forEach(deleteIcon => {
+            deleteIcon.addEventListener('click', function (e) {
+                e.preventDefault();
+                const userId = this.getAttribute('data-id');
+                const row = this.closest('.user-mgmt-row');
+                const userName = row.querySelector('.user-mgmt-name').textContent.trim();
+                eliminarUsuario(userId, userName);
+            });
+        });
+
+        // Additional event to update delete icon visibility when user state changes
+        document.querySelectorAll('.toggle-activo').forEach(toggle => {
+            toggle.addEventListener('change', function () {
+                const row = this.closest('.user-mgmt-row');
+
+                if (!this.checked) {
+                    row.addEventListener('mouseenter', makeVisible);
+                    row.addEventListener('mouseleave', makeInvisible);
+                } else {
+                    row.removeEventListener('mouseenter', makeVisible);
+                    row.removeEventListener('mouseleave', makeInvisible);
+                }
+            });
+        });
+
         function formatearFecha(fechaStr) {
             if (!fechaStr) return 'N/A';
 
@@ -173,7 +214,161 @@ document.addEventListener('DOMContentLoaded', function () {
                 return fechaStr;
             }
         }
-    };
+    }
+
+    // New function to handle user deletion
+    function eliminarUsuario(userId, userName) {
+        Swal.fire({
+            title: `¿Eliminar usuario ${userName}?`,
+            html: `¿Estás seguro que deseas eliminar permanentemente al usuario <b>${userName}</b>? Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#e74c3c',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Call API to delete user
+                var api_url = "http://localhost:5058/";
+                $.ajax({
+                    url: api_url + `api/Usuario/EliminarUsuario?idUsuario=${userId}`,
+                    method: 'DELETE'
+                }).done(function () {
+                    // Remove the row from UI
+                    const row = document.querySelector(`.user-mgmt-row[data-id="${userId}"]`);
+                    if (row) {
+                        row.remove();
+                    }
+
+                    Swal.fire({
+                        title: 'Eliminado',
+                        html: `El usuario <b>${userName}</b> ha sido eliminado correctamente.`,
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                }).fail(function (error) {
+                    console.error('Error al eliminar usuario:', error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un error al eliminar el usuario",
+                        icon: "error"
+                    });
+                });
+            }
+        });
+    }
+
+    // Función para renderizar los usuarios en el componente
+    //function renderUsuarios(usuarios) {
+    //    userRowsContainer.innerHTML = '';
+
+    //    if (!usuarios || usuarios.length === 0) {
+    //        userRowsContainer.innerHTML = `
+    //            <div class="text-center py-4 text-secondary">
+    //                No se encontraron usuarios para mostrar.
+    //            </div>
+    //        `;
+    //        return;
+    //    }
+
+    //    usuarios.forEach((usuario, index) => {
+    //        const row = document.createElement('div');
+    //        row.className = 'user-mgmt-row';
+    //        row.setAttribute('data-id', usuario.id);
+
+    //        // Aplicar fondo alterno para filas pares
+    //        if (index % 2 !== 0) {
+    //            row.classList.add('bg-light');
+    //        }
+
+    //        row.innerHTML = `
+    //            <div class="user-mgmt-id">${usuario.id}</div>
+    //            <div class="user-mgmt-name">
+    //                <div class="user-mgmt-avatar">
+    //                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"': ""}">
+    //                </div>
+    //                ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
+    //            </div>
+    //            <div class="user-mgmt-checkbox-container">
+    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
+    //                </span>
+    //            </div>
+    //            <div class="user-mgmt-checkbox-container">
+    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+    //            </div>
+    //            <div class="user-mgmt-checkbox-container">
+    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+    //            </div>
+    //            <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
+    //            <div class="user-mgmt-edit-icon">
+    //                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    //                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+    //                </svg>
+    //            </div>
+    //            <div class="user-mgmt-checkbox-container">
+    //                <label class="user-mgmt-toggle-switch">
+    //                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : "unchecked"}>
+    //                    <span class="user-mgmt-slider "></span>
+    //                </label>
+    //            </div>
+    //        `;
+
+    //        userRowsContainer.appendChild(row);
+    //    });
+
+    //    // Agregar event listeners a los botones de edición
+    //    document.querySelectorAll('.btn-editar').forEach(btn => {
+    //        btn.addEventListener('click', (e) => {
+    //            const userId = e.currentTarget.getAttribute('data-id');
+    //            //editarUsuario(userId);
+    //        });
+    //    });
+
+    //    // Agregar event listeners a los toggles de activación
+    //    document.querySelectorAll('.toggle-activo').forEach(toggle => {
+    //        toggle.addEventListener('change', (e) => {
+    //            e.preventDefault();
+    //            cambiarEstadoUsuario(e.currentTarget);
+    //        });
+    //    });
+
+    //    // Agregar event listeners a los checkbox de roles
+    //    document.querySelectorAll('.user-mgmt-custom-checkbox').forEach(checkbox => {
+    //        checkbox.addEventListener('click', function (e) {
+    //            // Prevent the default action
+    //            e.preventDefault();
+    //            row = e.currentTarget.closest('.user-mgmt-row');
+    //            isActive = row.querySelector('.toggle-activo').checked;
+    //            if (isActive) {
+    //                definirRolUsuario(e.currentTarget);
+    //            }
+    //        });
+    //    });
+
+    //    // Función para formatear la fecha
+        //function formatearFecha(fechaStr) {
+        //    if (!fechaStr) return 'N/A';
+
+        //    try {
+        //        // La fecha puede venir en diferentes formatos desde la API
+        //        const fecha = new Date(fechaStr);
+        //        if (isNaN(fecha.getTime())) return 'Fecha inválida';
+
+        //        return fecha.toLocaleDateString('es-ES', {
+        //            day: '2-digit',
+        //            month: '2-digit',
+        //            year: 'numeric'
+        //        });
+        //    } catch (error) {
+        //        console.error('Error al formatear fecha:', error);
+        //        return fechaStr;
+        //    }
+        //}
+    //};
 
     function definirRolUsuario(entity) {
         // Get checkbox details
@@ -239,8 +434,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-
-
     // Función para editar un usuario
     function editarUsuario(userId) {
         console.log(`Editando usuario con ID: ${userId}`);
@@ -253,11 +446,28 @@ document.addEventListener('DOMContentLoaded', function () {
         // O abrir un modal (ejemplo):
         // $('#modalEditarUsuario').modal('show');
         // document.getElementById('userId').value = userId;
-        };
+    };
+
+    function makeVisible(e) {
+        const deleteIcon = e.currentTarget.querySelector('.user-mgmt-delete-icon');
+        deleteIcon.style.opacity = '1';
+        deleteIcon.style.width = '35px';
+        deleteIcon.style.visibility = 'visible';
+        deleteIcon.setAttribute('margin-left', '10px');
+    }
+
+    function makeInvisible(e) {
+        const deleteIcon = e.currentTarget.querySelector('.user-mgmt-delete-icon');
+        deleteIcon.style.opacity = '0';
+        deleteIcon.style.width = '0px';
+        deleteIcon.style.visibility = 'invisible';
+        deleteIcon.setAttribute('margin-left', '0px');
+    }
 
     // Función para cambiar el estado activo/inactivo de un usuario
     async function cambiarEstadoUsuario(entity) {
         const row = entity.closest('.user-mgmt-row');
+        const deleteIcon = row.querySelector('.user-mgmt-delete-icon');
         const userName = row.querySelector('.user-mgmt-name').textContent.trim();
         const userId = row.querySelector('.user-mgmt-id').textContent.trim();
 
@@ -278,11 +488,22 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.isConfirmed) {
                 //Enviar instruccion al backend para cambiar estado del usuario
                 var api_url = "http://localhost:5058/";
-                entity.checked = entity.checked;
                 $.ajax({
-                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${entity.checked}`,
+                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}`,
                     method: 'PUT'
                 }).done(function () {
+                    entity.checked = !entity.checked;
+                    row.querySelectorAll('.user-mgmt-checkbox-container').forEach(checkbox => checkbox.classList.toggle('opacity-50'));
+
+                    if (entity.checked) {
+                        row.removeEventListener('mouseenter', makeVisible);
+                        row.removeEventListener('mouseleave', makeInvisible);
+                    }
+                    else {
+                        row.addEventListener('mouseenter', makeVisible);
+                        row.addEventListener('mouseleave', makeInvisible);
+                    }
+                    deleteIcon.classList.toggle('can-delete');
                     entity.classList.toggle('user-mgmt-checkbox-active');
                     Swal.fire({
                         title: 'Completado',
@@ -303,22 +524,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                 })
             }
-            else {
-                entity.checked = !entity.checked;
-            }
+            
         });
     }
 
-    // Event listener para el botón de registro
-    const btnRegistrar = document.getElementById('btnRegistrar');
-    if (btnRegistrar) {
-        btnRegistrar.addEventListener('click', () => {
-            console.log('Registrando nuevo usuario');
-            // Implementar lógica para abrir modal de registro o redireccionar
-            // window.location.href = '/Usuario/Registrar';
-        });
-    }
 
     // Cargar los usuarios al iniciar
     fetchUsuarios();
-    });
+});

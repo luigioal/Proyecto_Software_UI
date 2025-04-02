@@ -1,0 +1,124 @@
+﻿
+<!-- Agregar este HTML después del cierre del div.container -->
+<div id="modalConfirmacion" class="modal-overlay" >
+    <div class="modal-content" data-simplebar>
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4 mt-1" style="margin-bottom: 20px">Registrar usuario</h2>
+                <!-- Selector de tipo de usuario -->
+                <div class="user-type-selector mb-4">
+                    <div class="d-flex justify-content-center">
+                        <div class="btn-group role-selector" role="group" aria-label="Seleccionar tipo de usuario">
+                            <input type="radio" class="btn-check" name="userRole" id="roleCliente" value="cliente" autocomplete="off">
+                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleCliente">Cliente</label>
+
+                            <input type="radio" class="btn-check" name="userRole" id="roleAsesor" value="asesor" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleAsesor">Asesor</label>
+
+                            <input type="radio" class="btn-check" name="userRole" id="roleAdmin" value="admin" autocomplete="off">
+                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleAdmin">Admin</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registro exitoso -->
+                <div class="alert alert-success d-none" id="modalAlertExito">
+                    <i class="bi bi-check-circle-fill me-2"></i>Registro realizado con éxito
+                </div>
+
+                <!-- Error de registro -->
+                <div class="alert alert-danger d-none" id="modalAlertError">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Error al intentar registrar
+                </div>
+
+                <form id="registroUsuariosModalForm" data-validacion="auto" enctype="multipart/form-data">
+                    <!-- Campo específicos para Cliente -->
+                    <div class="cliente-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="modal-correo" class="form-label">Correo electrónico del asesor</label>
+                            <input type="email" class="form-control" id="input-email" name="CorreoElectronico" required />
+                        </div>
+                    </div>
+                    <!-- Campo específicos para Asesor-->
+                    <div class="asesor-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="modal-correo" class="form-label">Correo electrónico del administrador</label>
+                            <input type="email" class="form-control" id="input-email" name="CorreoElectronico" required />
+                        </div>
+                    </div>
+                    <!-- Nombre -->
+                    <div class="mb-3">
+                        <label for="modal-nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="input-nombre" name="Nombre" required />
+                    </div>
+
+                    <!-- Apellidos -->
+                    <div class="mb-3">
+                        <label for="modal-apellido1" class="form-label">Primer Apellido</label>
+                        <input type="text" class="form-control" id="input-apellido1" name="Apellido1" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modal-apellido2" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="input-apellido2" name="Apellido2" required />
+                    </div>
+
+                    <!-- Fecha de nacimiento -->
+                    <div class="mb-3">
+                        <label for="modal-fecha" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" id="input-fecha" name="FechaNacimiento" required />
+                    </div>
+
+                    <!-- Correo electrónico -->
+                    <div class="mb-3">
+                        <label for="modal-correo" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="input-email" name="CorreoElectronico" required />
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="mb-3">
+                        <label for="modal-direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="modal-direccion" name="Direccion" />
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="mb-3">
+                        <label for="modal-contrasena" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="input-password" name="Contrasena" required />
+                    </div>
+
+                    <!-- Foto de perfil -->
+                    <div class="mb-4">
+                        <label for="modal-foto" class="form-label">Foto de perfil</label>
+                        <input type="file" class="form-control" id="input-foto" name="FotoPerfil" />
+                    </div>
+
+                    <!-- Campos específicos para Admin -->
+                    <div class="admin-fields" style="display: none;">
+                    </div>
+
+                    <!-- Campos específicos para Cliente -->
+                    <div class="cliente-fields" style="display: none;">
+                        <div class="mb-4">
+                            <label for="modal-archivo" class="form-label">Archivo de contrato</label>
+                            <input type="file" class="form-control" id="input-archivo" name="archivo-contrato" />
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" id="btnSubmitRegistroModal" class="btn btn-success btn-lg">Registrar</button>
+                    </div>
+
+                    <!-- Cerrar modal -->
+                    <div class="d-grid">
+                        <button type="button" id="btnCerrarModal" class="btn btn-outline-secondary">Cancelar</button>
+                    </div>
+
+                    <!-- Campo oculto para tipo de usuario -->
+                    <input type="hidden" id="tipoUsuario" name="TipoUsuario" value="cliente" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
