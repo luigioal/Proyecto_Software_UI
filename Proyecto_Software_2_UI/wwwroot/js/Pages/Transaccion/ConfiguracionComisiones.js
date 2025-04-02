@@ -1,17 +1,76 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    // Get all input elements and edit icons
-    const inputs = document.querySelectorAll('.settings-value');
-    const editIcons = document.querySelectorAll('.settings-edit');
+﻿
+document.addEventListener('DOMContentLoaded', function () {
 
-    // Add event listeners to edit icons
-    editIcons.forEach((icon, index) => {
-        icon.addEventListener('click', function () {
-            enableEditing(inputs[index]);
+    // Configuración de API endpoints
+    const API = {
+        cargosExtra: "http://localhost:5058/api/Transaccion/ObtenerCargosExtra",
+        modificarCargosExtra: "http://localhost:5058/api/Transaccion/ModificarCargosExtra"
+    };
+
+    // Estado de la aplicación
+    let cargosExtra = {};
+
+    // Referencias a elementos DOM
+    const elements = {
+        cargosExtraInputs: document.querySelectorAll('.settings-value'),
+        editIcons: document.querySelectorAll('.settings-edit'),
+        saveButton: document.getElementById('saveButton')
+    };
+
+    function establecerEventListeners() {
+        // Add event listeners to edit icons
+        document.querySelectorAll('.settings-edit').forEach((icon, index) => {
+            icon.addEventListener('click', function () {
+                enableEditing(document.querySelectorAll('.settings-value')[index])
+            });
         });
-    });
+
+        // Handle save button click
+        const saveButton = elements.saveButton;
+        saveButton.addEventListener('click', function () {
+            // Collect all values
+            const cargosExtra = {
+                ComisionTransaccion: document.getElementById('comisionTransaccion').value,
+                ComisionAsesor: document.getElementById('comisionAsesor').value,
+                ComisionAsesorGanancia: document.getElementById('comisionAsesorGanancia').value,
+                ComisionAsesorPerdida: document.getElementById('comisionAsesorPerdida').value,
+                ImpuestoSobreGanancia: document.getElementById('impuestoSobreGanancia').value,
+                TarifaMinimaTransaccion: document.getElementById('tarifaMinimaTransaccion').value
+            }
+
+            // Do the POST API call
+            $.ajax({
+                headers: {
+                    'Accept': "application/json",
+                    'Content-Type': "application/json",
+                },
+                method: "POST",
+                url: API.modificarCargosExtra,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(cargosExtra),
+                hasContent: true
+            }).done(function () {
+                // Show success message with SweetAlert
+                Swal.fire({
+                    title: 'Guardado',
+                    text: 'La configuración de comisiones ha sido guardada',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#4CAF50'
+                });
+            }).fail(function () {
+                Swal.fire({
+                    title: "Message",
+                    text: "Hubo un erro al llamar al API",
+                    icon: "error"
+                })
+            })
+        });
+    }
 
     // Function to enable editing
     function enableEditing(input) {
+        console.log('enabling');
         // Store original value
         const originalValue = input.value;
         input.setAttribute('data-original', originalValue);
@@ -25,6 +84,93 @@
         // Add event listeners
         input.addEventListener('keydown', handleKeyPress);
         input.addEventListener('blur', handleBlur);
+    }
+
+    // Funciones para obtener datos
+    async function fetchCargosExtra() {
+        try {
+            const response = await fetch(API.cargosExtra);
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('Error al obtener información de las comisiones e impuestos:', error);
+            // Retornar datos por defecto en caso de error
+            return {
+                comisionTransaccion: 1.,
+                comisionAsesor: 1.,
+                comisionAsesorGanancia: 1.,
+                comisionAsesorPerdida: 1.,
+                impuestoSobreGanancia: 1.,
+                tarifaMinimaTransaccion: 1.,
+                editIcons: document.querySelector('.settings-edit'),
+            };
+        }
+    }
+
+    function renderizarCargosExtra(cargosExtra) {
+        cargoRowsContainer = document.querySelector('.settings-form');
+        heightDiv = document.createElement('div');
+        heightDiv.innerHTML = '<div style="height: 84px;"></div>'
+        cargoRowsContainer.innerHTML = '';
+
+        if (!cargosExtra || cargosExtra.length === 0) {
+            cargoRowsContainer.innerHTML = `
+                <div class="text-center py-4 text-secondary">
+                    No se encontraron cargos para mostrar.
+                </div>
+            `;
+            return;
+        }
+
+        Object.entries(cargosExtra).forEach(([key, value]) => {
+            const row = document.createElement('div');
+            row.className = 'settings-form';
+
+            row.innerHTML = `
+                <div class="settings-row">
+                    <label class="settings-label">${value.descripcion}</label>
+                    <div class="settings-symbol">${!(key == 'tarifaMinimaTransaccion') ? "%": "$"}</div>
+                    <input type="text" class="settings-value" id="${key}" value="${value.valor}" readonly>
+                    <div class="settings-edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                    </div>
+                </div>
+            `;
+
+            cargoRowsContainer.appendChild(row);
+        });
+
+        cargoRowsContainer.appendChild(heightDiv);
+    }
+    // Inicializar carga de datos
+
+    async function inicializarComponente() {
+        try {
+            // Mostrar indicadores de carga
+            mostrarCargando();
+
+            // Cargar datos de cargosExtra
+            const peticionCargosExtra = await fetchCargosExtra();
+
+            // Guardar datos en el estado
+            cargosExtra["comisionAsesor"] = { descripcion: "Comision de asesor por transaccion", valor: peticionCargosExtra.comisionAsesor };
+            cargosExtra["comisionAsesorGanancia"] = { descripcion: "Comision de asesor por venta con ganancia", valor: peticionCargosExtra.comisionAsesorGanancia };
+            cargosExtra["comisionAsesorPerdida"] = { descripcion: "Comision de asesor por venta con perdida", valor: peticionCargosExtra.comisionAsesorPerdida };
+            cargosExtra["comisionTransaccion"] = { descripcion: "Comision de plataforma por transaccion", valor: peticionCargosExtra.comisionTransaccion };
+            cargosExtra["tarifaMinimaTransaccion"] = { descripcion: "Tarifa minima por transaccion", valor: peticionCargosExtra.tarifaMinimaTransaccion };
+            cargosExtra["impuestoSobreGanancia"] = { descripcion: "Impuesto sobre ganancia", valor: peticionCargosExtra.impuestoSobreGanancia };
+
+            // Renderizar información
+            renderizarCargosExtra(cargosExtra);
+
+            // Asignar listeners a elementos
+            establecerEventListeners();
+        } catch (error) {
+            console.error('Error al inicializar dashboard:', error);
+            mostrarError('No se pudo cargar la información del dashboard', error.message);
+        }
     }
 
     // Handle key presses during editing
@@ -46,11 +192,51 @@
 
         // Allow only numbers, backspace, delete, arrows
         const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-        const isNumber = /^\d$/.test(e.key);
+        const isNumber = /^[\d.]$/.test(e.key);  // Changed regex to allow digits and dot
 
         if (!isNumber && !allowedKeys.includes(e.key)) {
             e.preventDefault();
         }
+    }
+
+    function mostrarCargando() {
+        // Si tenemos SweetAlert, usarlo
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Cargando información...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            setTimeout(() => Swal.close(), 1000); // Cerrar después de 1 segundo máximo
+        }
+
+        // Si no hay SweetAlert, usar indicadores nativos
+        if (elements.asesorList) {
+            elements.asesorList.innerHTML = '<div class="loading">Cargando asesores...</div>';
+        }
+    }
+
+    function mostrarError(titulo, mensaje) {
+        // Si tenemos SweetAlert, usarlo
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: titulo,
+                text: mensaje,
+                icon: 'error',
+                confirmButtonText: 'Reintentar',
+                confirmButtonColor: '#4b5563'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
+            });
+            return;
+        }
+
+        // Fallback si no hay SweetAlert
+        alert(`${titulo}\n${mensaje}`);
     }
 
     // Handle blur event
@@ -132,28 +318,5 @@
         input.removeEventListener('blur', handleBlur);
     }
 
-    // Handle save button click
-    const saveButton = document.querySelector('.settings-button');
-    saveButton.addEventListener('click', function () {
-        // Collect all values
-        const values = {};
-        inputs.forEach((input, index) => {
-            const label = document.querySelectorAll('.settings-label')[index].textContent;
-            if (label) { // Only save inputs that have labels
-                values[label] = input.value;
-            }
-        });
-
-        // Log to console (would be API call in production)
-        console.log('Saving commission settings:', values);
-
-        // Show success message with SweetAlert
-        Swal.fire({
-            title: 'Guardado',
-            text: 'La configuración de comisiones ha sido guardada',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#4CAF50'
-        });
-    });
+    inicializarComponente();
 });
