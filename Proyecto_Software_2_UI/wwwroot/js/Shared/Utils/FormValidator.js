@@ -19,6 +19,14 @@ const FormValidator = {
             regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/,
             mensaje: 'Por favor, ingresa un nombre válido'
         },
+        'apellido1': { //Acepta letras, acentos y espacios (2-50 caracteres)
+            regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/,
+            mensaje: 'Por favor, ingresa un apellido válido'
+        },
+        'apellido2': { //Acepta letras, acentos y espacios (2-50 caracteres)
+            regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/,
+            mensaje: 'Por favor, ingresa un apellido válido'
+        },
         'telefono': {
             regex: /^\d{8,15}$/,
             mensaje: 'Por favor, ingresa un número de teléfono válido'
@@ -124,8 +132,9 @@ const FormValidator = {
 
     // Inicializar validación en tiempo real para un formulario
     inicializar: function (formId) {
+        console.log("No se encontro nada en los forms.")
         const form = document.getElementById(formId);
-        if (!form) return;
+        if (!form) { return };
 
         // Validar al enviar el formulario
         form.addEventListener('submit', (e) => {
