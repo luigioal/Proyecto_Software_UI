@@ -454,3 +454,22 @@ body.modal-open {
 .card-body-custom {
     border-radius: 50px;
 }
+
+.user-row-inactive {
+    opacity: 1;
+    pointer-events: none;
+    background-color: #f9f9f9 !important;
+}
+
+    .user-row-inactive * {
+        color: #999 !important;
+    }
+
+.user-mgmt-toggle-switch.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.user-mgmt-slider.disabled {
+    background-color: #ccc !important;
+}

@@ -1,6 +1,7 @@
 ﻿
 // Función para cargar y renderizar los usuarios
 document.addEventListener('DOMContentLoaded', function () {
+    var idAdmin = 1;
     // Referencia al contenedor donde se renderizarán las filas
     const userRowsContainer = document.querySelector('.user-mgmt-content');
     const loadingIndicator = document.createElement('div');
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //    throw new Error(`Error HTTP: ${result.message}`);
             //}
 
+            const resultados = filtrarResultados(result);
             renderUsuarios(result);
         }
         ).fail(function (error) {
@@ -38,6 +40,19 @@ document.addEventListener('DOMContentLoaded', function () {
             //    icon: "error"
             //})
         });
+    }
+
+    function filtrarResultados(resultados)
+    {
+        resultadosFiltrados = [];
+        resultados.forEach(resultado => {
+            console.log(resultado);
+            if (resultado.idSupervisor == "") { resultadosFiltrados.add(resultado) };
+            if (resultado.idSupervisor == idAdmin) { resultadosFiltrados.add(resultado) };
+
+        })
+
+        return resultadosFiltrados;
     }
 
     async function fetchUsuario(userId, callbackFunction) {
@@ -84,49 +99,59 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Define which IDs should be grayed out (inactive)
+        const inactiveUserIds = [idAdmin]; // Add your specific IDs here
+
         usuarios.forEach((usuario, index) => {
             const row = document.createElement('div');
             row.className = 'user-mgmt-row';
             row.setAttribute('data-id', usuario.id);
 
-            // Aplicar fondo alterno para filas pares
+            // Check if this user should be inactive
+            const isInactive = inactiveUserIds.includes(usuario.id);
+            if (isInactive) {
+                row.classList.add('user-row-inactive');
+            }
+
+            // Apply alternate background for even rows
             if (index % 2 !== 0) {
                 row.classList.add('bg-light');
             }
 
             row.innerHTML = `
-            <div class="user-mgmt-id">${usuario.id}</div>
-            <div class="user-mgmt-name">
+            <div class="user-mgmt-id ${isInactive ? 'text-muted' : ''}">${usuario.id}</div>
+            <div class="user-mgmt-name ${isInactive ? 'text-muted' : ''}">
                 <div class="user-mgmt-avatar">
-                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""}>
+                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""} 
+                         ${isInactive ? 'style="filter: grayscale(80%); opacity: 0.7;"' : ''}>
                 </div>
                 ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
             </div>
 
-            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}" >
-                <span class="user-mgmt-custom-checkbox text-muted ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
                 </span>
             </div>
-            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}">
-                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
             </div>
-            <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}">
-                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
             </div>
 
-            <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
+            <div class="user-mgmt-date ${isInactive ? 'text-muted' : ''}">${formatearFecha(usuario.ultimoAcceso)}</div>
             <div class="user-mgmt-edit-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${isInactive ? 'fill="#999"' : ''}>
                     <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                 </svg>
             </div>
             <div class="user-mgmt-actions-container">
-                <label class="user-mgmt-toggle-switch">
-                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""}>
-                    <span class="user-mgmt-slider"></span>
+                <label class="user-mgmt-toggle-switch ${isInactive ? 'disabled' : ''}">
+                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""} ${isInactive ? 'disabled' : ''}>
+                    <span class="user-mgmt-slider ${isInactive ? 'disabled' : ''}"></span>
                 </label>
-                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}" ${isInactive ? 'style="pointer-events: none; opacity: 0.5;"' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${isInactive ? 'fill="#999"' : ''}>
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                     </svg>
                 </div>
@@ -136,13 +161,14 @@ document.addEventListener('DOMContentLoaded', function () {
             userRowsContainer.appendChild(row);
         });
 
+        // Rest of your event listeners...
         document.querySelectorAll('.user-mgmt-row').forEach(row => {
             const stateReference = row.querySelector('.toggle-activo');
-            if (!stateReference.checked) {
+            if (!stateReference.checked && !row.classList.contains('user-row-inactive')) {
                 row.addEventListener("mouseenter", makeVisible);
                 row.addEventListener('mouseleave', makeInvisible);
             }
-        })
+        });
 
         // Add the event listeners as before
         document.querySelectorAll('.btn-editar').forEach(btn => {
