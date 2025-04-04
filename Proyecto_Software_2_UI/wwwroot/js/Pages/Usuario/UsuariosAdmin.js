@@ -148,10 +148,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
 
-        // Add the event listeners as before
+        // Esto para abrir el modal/poUup de Editar Usuario
         document.querySelectorAll('.user-mgmt-edit-icon').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                //
+                const userId = e.currentTarget.closest('.user-mgmt-row').getAttribute('data-id');
+                
+                console.log("Usuario ID:" + userId);
             });
         });
 
