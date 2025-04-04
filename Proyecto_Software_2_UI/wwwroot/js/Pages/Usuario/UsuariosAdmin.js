@@ -113,13 +113,17 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="user-mgmt-checkbox-container ${!usuario.estado ? "opacity-50" : ""}">
                 <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
             </div>
-
             <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
+            
+
+
             <div class="user-mgmt-edit-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                 </svg>
             </div>
+
+
             <div class="user-mgmt-actions-container">
                 <label class="user-mgmt-toggle-switch">
                     <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""}>
@@ -145,10 +149,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
         // Add the event listeners as before
-        document.querySelectorAll('.btn-editar').forEach(btn => {
+        document.querySelectorAll('.user-mgmt-edit-icon').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const userId = e.currentTarget.getAttribute('data-id');
-                //editarUsuario(userId);
+                //
             });
         });
 
@@ -262,113 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Función para renderizar los usuarios en el componente
-    //function renderUsuarios(usuarios) {
-    //    userRowsContainer.innerHTML = '';
-
-    //    if (!usuarios || usuarios.length === 0) {
-    //        userRowsContainer.innerHTML = `
-    //            <div class="text-center py-4 text-secondary">
-    //                No se encontraron usuarios para mostrar.
-    //            </div>
-    //        `;
-    //        return;
-    //    }
-
-    //    usuarios.forEach((usuario, index) => {
-    //        const row = document.createElement('div');
-    //        row.className = 'user-mgmt-row';
-    //        row.setAttribute('data-id', usuario.id);
-
-    //        // Aplicar fondo alterno para filas pares
-    //        if (index % 2 !== 0) {
-    //            row.classList.add('bg-light');
-    //        }
-
-    //        row.innerHTML = `
-    //            <div class="user-mgmt-id">${usuario.id}</div>
-    //            <div class="user-mgmt-name">
-    //                <div class="user-mgmt-avatar">
-    //                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"': ""}">
-    //                </div>
-    //                ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
-    //            </div>
-    //            <div class="user-mgmt-checkbox-container">
-    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
-    //                </span>
-    //            </div>
-    //            <div class="user-mgmt-checkbox-container">
-    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
-    //            </div>
-    //            <div class="user-mgmt-checkbox-container">
-    //                <span class="user-mgmt-custom-checkbox ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
-    //            </div>
-    //            <div class="user-mgmt-date">${formatearFecha(usuario.ultimoAcceso)}</div>
-    //            <div class="user-mgmt-edit-icon">
-    //                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    //                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-    //                </svg>
-    //            </div>
-    //            <div class="user-mgmt-checkbox-container">
-    //                <label class="user-mgmt-toggle-switch">
-    //                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : "unchecked"}>
-    //                    <span class="user-mgmt-slider "></span>
-    //                </label>
-    //            </div>
-    //        `;
-
-    //        userRowsContainer.appendChild(row);
-    //    });
-
-    //    // Agregar event listeners a los botones de edición
-    //    document.querySelectorAll('.btn-editar').forEach(btn => {
-    //        btn.addEventListener('click', (e) => {
-    //            const userId = e.currentTarget.getAttribute('data-id');
-    //            //editarUsuario(userId);
-    //        });
-    //    });
-
-    //    // Agregar event listeners a los toggles de activación
-    //    document.querySelectorAll('.toggle-activo').forEach(toggle => {
-    //        toggle.addEventListener('change', (e) => {
-    //            e.preventDefault();
-    //            cambiarEstadoUsuario(e.currentTarget);
-    //        });
-    //    });
-
-    //    // Agregar event listeners a los checkbox de roles
-    //    document.querySelectorAll('.user-mgmt-custom-checkbox').forEach(checkbox => {
-    //        checkbox.addEventListener('click', function (e) {
-    //            // Prevent the default action
-    //            e.preventDefault();
-    //            row = e.currentTarget.closest('.user-mgmt-row');
-    //            isActive = row.querySelector('.toggle-activo').checked;
-    //            if (isActive) {
-    //                definirRolUsuario(e.currentTarget);
-    //            }
-    //        });
-    //    });
-
-    //    // Función para formatear la fecha
-        //function formatearFecha(fechaStr) {
-        //    if (!fechaStr) return 'N/A';
-
-        //    try {
-        //        // La fecha puede venir en diferentes formatos desde la API
-        //        const fecha = new Date(fechaStr);
-        //        if (isNaN(fecha.getTime())) return 'Fecha inválida';
-
-        //        return fecha.toLocaleDateString('es-ES', {
-        //            day: '2-digit',
-        //            month: '2-digit',
-        //            year: 'numeric'
-        //        });
-        //    } catch (error) {
-        //        console.error('Error al formatear fecha:', error);
-        //        return fechaStr;
-        //    }
-        //}
-    //};
+    
 
     function definirRolUsuario(entity) {
         // Get checkbox details
