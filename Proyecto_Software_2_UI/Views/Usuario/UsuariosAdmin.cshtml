@@ -25,6 +25,80 @@
     <div class="user-mgmt-footer">
         <button id="btn-registrar" class="user-mgmt-register-button">Registrar</button>
     </div>
+
+    <!-- Modal de Edición de Usuario -->
+    <div id="modalEdicionUsuario" class="modal-overlay">
+        <div class="modal-content" data-simplebar>
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 mt-1" style="margin-bottom: 20px">Editar usuario</h2>
+
+                    <!-- Alertas -->
+                    <div class="alert alert-success d-none" id="modalEditAlertExito">
+                        <i class="bi bi-check-circle-fill me-2"></i>Usuario actualizado exitosamente
+                    </div>
+                    <div class="alert alert-danger d-none" id="modalEditAlertError">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Error al actualizar usuario
+                    </div>
+
+                    <form id="editarUsuarioForm" data-validacion="auto">
+                        <!-- Campo oculto para ID -->
+                        <input type="hidden" id="edit-id" name="Id">
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="edit-nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="edit-nombre" name="Nombre">
+                        </div>
+
+                        <!-- Apellidos -->
+                        <div class="mb-3">
+                            <label for="edit-apellido1" class="form-label">Primer Apellido</label>
+                            <input type="text" class="form-control" id="edit-apellido1" name="PrimerApellido">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit-apellido2" class="form-label">Segundo Apellido</label>
+                            <input type="text" class="form-control" id="edit-apellido2" name="SegundoApellido">
+                        </div>
+
+                        <!-- Correo electrónico (solo lectura) -->
+                        <div class="mb-3">
+                            <label for="edit-correo" class="form-label">Correo electrónico</label>
+                            <input type="email" class="form-control" id="edit-correo" name="CorreoElectronico" readonly>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="mb-3">
+                            <label for="edit-direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="edit-direccion" name="Direccion">
+                        </div>
+
+                        @* agregar nuevos campos del formulario para que tenga todo del DTO *@
+
+                        <!-- Contraseña (opcional) -->
+                        <div class="mb-3">
+                            <label for="edit-contrasena" class="form-label">Nueva contraseña (opcional)</label>
+                            <input type="password" class="form-control" id="edit-contrasena" name="Contrasena" placeholder="Dejar en blanco para mantener la actual">
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" id="btnSubmitEditar" class="btn btn-success btn-lg">Guardar cambios</button>
+                        </div>
+
+                        <!-- Cerrar modal -->
+                        <div class="d-grid">
+                            <button type="button" id="btnCerrarModalEditar" class="btn btn-outline-secondary">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 @await Html.PartialAsync("~/Views/Auth/RegistroUsuariosModal.cshtml")
@@ -33,4 +107,5 @@
     <script src="~/js/Pages/Usuario/UsuariosAdmin.js"></script>
     <script src="~/js/Shared/Utils/FormValidator.js"></script>
     <script src="~/js/Pages/Auth/RegistroView/RegistroUsuariosModal.js"></script>
+    <script src="~/js/Pages/Usuario/EditarUsuarioModal.js"></script>
 }
