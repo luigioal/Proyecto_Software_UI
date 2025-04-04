@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
             //else {
             //    throw new Error(`Error HTTP: ${result.message}`);
             //}
-
+            console.log(result)
             const resultados = filtrarResultados(result);
-            renderUsuarios(result);
+            renderUsuarios(resultados);
         }
         ).fail(function (error) {
             console.error('Error al obtener usuarios:', error);
@@ -42,17 +42,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function filtrarResultados(resultados)
-    {
-        resultadosFiltrados = [];
+    function filtrarResultados(resultados) {
+        const adminsFiltrados = [];
+        const asesoresFiltrados = [];
+        const clientesFiltrados = []
+        const asesorIds = new Set(); // Track supervisor IDs for faster lookup
+
+        // First pass: Filter by direct conditions
         resultados.forEach(resultado => {
-            console.log(resultado);
-            if (resultado.idSupervisor == "") { resultadosFiltrados.add(resultado) };
-            if (resultado.idSupervisor == idAdmin) { resultadosFiltrados.add(resultado) };
+            if (resultado.idSupervisor === 0) {
+                adminsFiltrados.push(resultado);
+            }
+            if (resultado.idSupervisor === idAdmin) {
+                asesoresFiltrados.push(resultado);
+                asesorIds.add(resultado.id); // Store IDs for quick lookup
+            }
+        });
 
-        })
+        // Second pass: Add results linked to asesores
+        resultados.forEach(resultado => {
+            if (asesorIds.has(resultado.idSupervisor)) {
+                clientesFiltrados.push(resultado);
+            }
+        });
 
-        return resultadosFiltrados;
+        // Return combined array (no duplicates)
+        return [...adminsFiltrados, ...asesoresFiltrados, ...clientesFiltrados];
     }
 
     async function fetchUsuario(userId, callbackFunction) {
