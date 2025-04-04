@@ -134,9 +134,20 @@
                 }).then(() => {
                     if (origen === 'recuperar') {
                         window.location.href = `/Auth/NuevaContrasena?correo=${response.email}`;
-                    } else {
+                    } else if (sessionStorage.getItem('userEmail') !== null) {
+
+
+
                         // Por defecto o si origen es 'login'
+
+                        //usando el useremail buscar el tipo de usuario y hace run if.
+
+                        //if tipo == Cliente redirigir a /Home/IndexCliente
+                        //if tipo == Admin redirigir a /Finanza/ActividadAdmin
+
                         window.location.href = "/Home/Index";
+                    } else {
+                        console.log("Error de inicio de session.");
                     }
                 });
             } else {
