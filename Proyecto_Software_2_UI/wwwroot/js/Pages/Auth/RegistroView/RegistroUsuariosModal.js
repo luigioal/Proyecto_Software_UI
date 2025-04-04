@@ -17,6 +17,7 @@
     const adminFields = document.querySelector('.admin-fields');
     const clienteFields = document.querySelectorAll('.cliente-fields');
     const tipoUsuarioInput = document.getElementById('tipoUsuario');
+    const correoAsesor = document.querySelector('.input-email-asesor');
 
     // Gestionar cambio de roles
     function handleRoleChange() {
@@ -37,6 +38,38 @@
             tipoUsuarioInput.value = 'cliente';
         }
     }
+    // Assignar event listener para revision de correo de asesor
+    correoAsesor.addEventListener('focusout', function (e) {
+        let api_url = "http://localhost:5058";
+        console.log('Hola me ves');
+        console.log(e.currentTarget.value);
+        //$.ajax({
+        //    headers: {
+        //        'Accept': "application/json",
+        //        'Content-Type': "application/json",
+        //    },
+        //    method: "POST",
+        //    url: api_url + `/api/Usuario/BuscarUsuarioPorEmail?email=${e.currentTarget.value}`,
+        //    contentType: "application/json; charset=utf-8",
+        //    data: JSON.stringify(cargosExtra),
+        //    hasContent: true
+        //}).done(function () {
+        //    // Show success message with SweetAlert
+        //    Swal.fire({
+        //        title: 'Guardado',
+        //        text: 'La configuración de comisiones ha sido guardada',
+        //        icon: 'success',
+        //        confirmButtonText: 'Aceptar',
+        //        confirmButtonColor: '#4CAF50'
+        //    });
+        //}).fail(function () {
+        //    Swal.fire({
+        //        title: "Message",
+        //        text: "Hubo un erro al llamar al API",
+        //        icon: "error"
+        //    })
+        //})
+    })
 
     // Asignar event listeners para cambios de rol
     roleCliente.addEventListener('change', handleRoleChange);
@@ -106,22 +139,22 @@
 
     FormValidator.inicializar('registroUsuariosModalForm');
 
-    //const registroManager = new RegistroAsesor();
+    const registroManager = new RegistroAsesor();
 
-    //document.getElementById("registroAsesorForm").addEventListener("submit", function (event) {
-    //    event.preventDefault();
+    document.getElementById("registroUsuariosModalForm").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    //    if (FormValidator.validarFormulario('registroAsesorForm')) {
-    //        registroManager.SubmitRegistroRequest();
-    //        console.log('Formulario válido, enviando datos...');
-    //    } else {
-    //        Swal.fire({
-    //            title: "Registro incompleto",
-    //            text: "Por favor, completa todos los campos requeridos.",
-    //            icon: "warning"
-    //        });
-    //    }
-    //});
+        if (FormValidator.validarFormulario('registroAsesorForm')) {
+            registroManager.SubmitRegistroRequest();
+            console.log('Formulario válido, enviando datos...');
+        } else {
+            Swal.fire({
+                title: "Registro incompleto",
+                text: "Por favor, completa todos los campos requeridos.",
+                icon: "warning"
+            });
+        }
+    });
 });
 
 function RegistroAsesor() {
@@ -137,6 +170,48 @@ function RegistroAsesor() {
         formData.append("Direccion", $('#input-direccion').val());
         formData.append("Contrasena", $('#input-contrasena').val());
         formData.append("FotoPerfil", $('#input-foto')[0].files[0]);
+
+        $.ajax({
+            method: "POST",
+            url: api_url + "/api/Usuario/CrearUsuario",
+            processData: false,
+            contentType: false,
+            data: formData
+        }).done(function (response) {
+            console.log("Registro - Success!", response);
+            Swal.fire({
+                title: "Registro exitoso",
+                text: "Se ha notificado al administrador para la activación de la cuenta.",
+                icon: "success"
+            });
+            $('#registroAsesorForm')[0].reset();
+        }).fail(function (error) {
+            console.log("Registro - ERROR!:", error);
+            Swal.fire({
+                title: "Error al registrar",
+                text: "Ocurrió un error. Inténtalo más tarde.",
+                icon: "error"
+            });
+        });
+    }
+}
+
+function RegistroCliente() {
+    this.SubmitRegistroRequest = function () {
+        let api_url = "http://localhost:5058";
+
+        const formData = new FormData();
+        formData.append("IdSupervisor", $('#input-').val());
+        formData.append("Nombre", $('#input-nombre').val());
+        formData.append("Apellido1", $('#input-apellido1').val());
+        formData.append("Apellido2", $('#input-apellido2').val());
+        formData.append("FechaNacimiento", $('#input-fecha').val());
+        formData.append("CorreoElectronico", $('#input-correo').val());
+        formData.append("Direccion", $('#input-direccion').val());
+        formData.append("Contrasena", $('#input-contrasena').val());
+        formData.append("FotoPerfil", $('#input-foto')[0].files[0]);
+        formData.append("DocumentoContrato", $('#input-archivo')[0].files[0]);
+        formData.append("Estado", false);
 
         $.ajax({
             method: "POST",

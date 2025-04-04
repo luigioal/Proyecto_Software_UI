@@ -1,33 +1,36 @@
 ﻿@section Scripts {
-    <script src="~/js/Pages/Finanza/ActividadAdmin.js"></script>
+    <script src="~/js/Pages/Finanza/ActividadAsesor.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pages/Finanza/ActividadAsesor.css" />
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/Pages/Finanza/ActividadAdmin.css" />
-}
 
 <div class="dashboard-panel">
     <div class="dashboard-header">
         <div class="dashboard-avatar">
-            <img class="dashboard-avatar-img"/>
+            <img class="dashboard-avatar-img" />
         </div>
         <div class="dashboard-user-info">
-            <div class="dashboard-user-name">Nombre de administrador</div>
-            <div class="dashboard-user-meta">Administrador desde: 01/01/2024</div>
+            <div class="dashboard-user-name">Nombre de asesor</div>
+            <div class="dashboard-user-meta">Asesor desde: 01/01/2024</div>
         </div>
     </div>
 
     <div class="dashboard-content">
         <div class="dashboard-section">
-            <h2 class="dashboard-section-title">Mis Asesores</h2>
+            <div class="header-title-registro">
+                <h2 class="dashboard-section-title">Mis Clientes</h2>
+                <button id="btn-registrar" class="user-mgmt-register-button">Registrar</button>
+            </div>
 
             <div class="activity-list">
                 <div class="activity-header">
                     <div class="activity-header-label">ID</div>
                     <div class="activity-header-label">Nombre</div>
-                    <div class="activity-header-label">Clientes</div>
+                    <div class="activity-header-label">Activos</div>
                     <div class="activity-header-label">Último acceso</div>
-                    <div class="activity-header-label">Comisiones</div>
+                    <div class="activity-header-label">Balance</div>
                 </div>
 
                 <div class="activity-list-container">
@@ -41,7 +44,7 @@
                             @* </div> *@
                             <div>Nombre de asesor</div>
                         </div>
-                        <div class="activity-value">3 clientes</div>
+                        <div class="activity-value">3 activos</div>
                         <div class="activity-access">01/01/2025</div>
                         <div class="activity-commission">$300</div>
                     </div>
@@ -54,10 +57,10 @@
                 <h2 class="performance-title">Rendimientos</h2>
                 <div class="performance-dropdown">
                     <select class="performance-select">
-                        <option value=""><label>Todos los asesores</label></option>
-                        <option value="asesor1">Asesor 1</option>
-                        <option value="asesor2">Asesor 2</option>
-                        <option value="asesor3">Asesor 3</option>
+                        <option value=""><label>Todos los clientes</label></option>
+                        <option value="asesor1">Cliente 1</option>
+                        <option value="asesor2">Clientes 2</option>
+                        <option value="asesor3">Cliente 3</option>
                     </select>
                 </div>
             </div>
