@@ -8,5 +8,10 @@ namespace Proyecto_Software_2_UI.Controllers
         {
             return View();
         }
+
+        public IActionResult ActividadCliente()
+        {
+            return View();
+        }
     }
 }

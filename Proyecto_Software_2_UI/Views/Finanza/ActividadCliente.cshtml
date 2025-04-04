@@ -1,0 +1,60 @@
+﻿@section Scripts {
+    <script src="~/js/Pages/Finanza/ActividadCliente.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pages/Finanza/ActividadCliente.css" />
+}
+
+<div class="dashboard-panel">
+    <div class="dashboard-header">
+        <div class="dashboard-avatar">
+            <img class="dashboard-avatar-img" />
+        </div>
+        <div class="dashboard-user-info">
+            <div class="dashboard-user-name">Nombre de cliente</div>
+            <div class="dashboard-user-meta">Cliente desde: 01/01/2024</div>
+            <div class="dashboard-user-meta-asesor">Asesorada/o por #asesor</div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="dashboard-section">
+            <h2 class="dashboard-section-title">Mis inversiones</h2>
+
+            <div class="activity-list">
+                <div class="activity-header">
+                    <div class="activity-header-label">Asset</div>
+                    <div class="activity-header-label">Simbolo</div>
+                    <div class="activity-header-label">Cantidad</div>
+                    <div class="activity-header-label">Precio</div>
+                    <div class="activity-header-label">Ultima compra</div>
+                    <div class="activity-header-label">Ganancia acumulada</div>
+                </div>
+
+                <div class="activity-list-container">
+                    <div class="activity-item">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="performance-section">
+            <div class="performance-header">
+                <h2 class="performance-title">Rendimientos</h2>
+                <div class="performance-dropdown">
+                    <select class="performance-select">
+                        <option value=""><label>Todas las inversiones</label></option>
+                        <option value="asesor1">Asesor 1</option>
+                        <option value="asesor2">Asesor 2</option>
+                        <option value="asesor3">Asesor 3</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <img alt="Gráfico de rendimientos" class="chart-image" />
+            </div>
+        </div>
+    </div>
+</div>
