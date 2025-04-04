@@ -1,6 +1,6 @@
 ﻿// Función para cargar y renderizar los usuarios
 document.addEventListener('DOMContentLoaded', function () {
-    var idAdmin = 1;
+    const idAdmin = 2;
     // Referencia al contenedor donde se renderizarán las filas
     const userRowsContainer = document.querySelector('.user-mgmt-content');
     const loadingIndicator = document.createElement('div');
