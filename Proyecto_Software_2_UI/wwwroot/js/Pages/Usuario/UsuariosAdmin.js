@@ -1,5 +1,4 @@
-﻿
-// Función para cargar y renderizar los usuarios
+﻿// Función para cargar y renderizar los usuarios
 document.addEventListener('DOMContentLoaded', function () {
     // Referencia al contenedor donde se renderizarán las filas
     const userRowsContainer = document.querySelector('.user-mgmt-content');
@@ -40,37 +39,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    async function fetchUsuario(userId, callbackFunction) {
-        return $.ajax({
-            url: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
-            method: "GET",
-            contentType: "application/json:charset=utf-8",
-            dataType: "json"
-        }).done(function (result) {
-            //Implementacion con wrapper API_Response en el backend
-            //if (result.result == "OK") {
-            //    renderUsuarios(result.data);
-            //}
-            //else {
-            //    throw new Error(`Error HTTP: ${result.message}`);
-            //}
+    //async function fetchUsuario(userId, callbackFunction) {
+    //    return $.ajax({
+    //        url: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+    //        method: "GET",
+    //        contentType: "application/json:charset=utf-8",
+    //        dataType: "json"
+    //    }).done(function (result) {
+    //        //Implementacion con wrapper API_Response en el backend
+    //        //if (result.result == "OK") {
+    //        //    renderUsuarios(result.data);
+    //        //}
+    //        //else {
+    //        //    throw new Error(`Error HTTP: ${result.message}`);
+    //        //}
 
-            callbackFunction(result);
-        }
-        ).fail(function (error) {
-            console.error('Error al obtener usuarios:', error);
-            userRowsContainer.innerHTML = `
-                    <div class="alert alert-danger my-3" role="alert">
-                        Error al cargar los usuarios. Por favor, intente de nuevo más tarde.
-                    </div>
-                    `;
-            //Swal.fire({
-            //    title: "Message",
-            //    text: "Error Loaoding Vacation Data",
-            //    icon: "error"
-            //})
-        });
-    }
+    //        callbackFunction(result);
+    //    }
+    //    ).fail(function (error) {
+    //        console.error('Error al obtener usuarios:', error);
+    //        userRowsContainer.innerHTML = `
+    //                <div class="alert alert-danger my-3" role="alert">
+    //                    Error al cargar los usuarios. Por favor, intente de nuevo más tarde.
+    //                </div>
+    //                `;
+    //        //Swal.fire({
+    //        //    title: "Message",
+    //        //    text: "Error Loaoding Vacation Data",
+    //        //    icon: "error"
+    //        //})
+    //    });
+    //}
 
     function renderUsuarios(usuarios) {
         userRowsContainer.innerHTML = '';
@@ -152,8 +151,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.user-mgmt-edit-icon').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const userId = e.currentTarget.closest('.user-mgmt-row').getAttribute('data-id');
-                
-                console.log("Usuario ID:" + userId);
+                console.log("Editando Usuario ID:", userId);
+
+                // Usar el módulo de edición para cargar el usuario
+                if (window.EditarUsuarioModal) {
+                    window.EditarUsuarioModal.cargarUsuarioParaEditar(userId);
+                }
             });
         });
 
@@ -267,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    
+
 
     function definirRolUsuario(entity) {
         // Get checkbox details
@@ -331,20 +334,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
             }
         });
-    };
-
-    // Función para editar un usuario
-    function editarUsuario(userId) {
-        console.log(`Editando usuario con ID: ${userId}`);
-        // Aquí implementarías la lógica para abrir un modal de edición
-        // o navegar a la página de edición
-
-        // Ejemplo de redirección:
-        // window.location.href = `/Usuario/Editar/${userId}`;
-
-        // O abrir un modal (ejemplo):
-        // $('#modalEditarUsuario').modal('show');
-        // document.getElementById('userId').value = userId;
     };
 
     function makeVisible(e) {
@@ -423,10 +412,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                 })
             }
-            
+
         });
     }
 
+    // Exponer fetchUsuarios globalmente para que el modal pueda actualizar la tabla
+    window.fetchUsuarios = fetchUsuarios;
 
     // Cargar los usuarios al iniciar
     fetchUsuarios();
