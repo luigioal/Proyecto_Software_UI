@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return await response.json();
         } catch (error) {
             console.error('Error al cargar rendimientos:', error);
-            mostrarToast('Error al cargar rendimientos', 'error');
+            //mostrarToast('Error al cargar rendimientos', 'error');
 
             // Retornar datos simulados en caso de error
             return Array.from({ length: 12 }, (_, i) => {
