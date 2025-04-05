@@ -44,7 +44,7 @@
 
     // Función para validar la contraseña
     function validatePassword(email, password) {
-        const api_url = "proyecto-software-2.azurewebsites.net";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
             method: "POST",

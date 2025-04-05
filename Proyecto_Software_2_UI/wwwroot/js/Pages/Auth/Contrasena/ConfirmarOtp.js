@@ -78,7 +78,7 @@
 
     // Función para validar OTP
     function validarOTP() {
-        const api_url = "proyecto-software-2.azurewebsites.net";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         const data = {
             email: document.getElementById('input-correo').value,
