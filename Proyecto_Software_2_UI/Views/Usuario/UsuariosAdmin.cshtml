@@ -78,8 +78,13 @@
                             <input type="text" class="form-control" id="edit-direccion" name="Direccion">
                         </div>
 
-                        @* agregar nuevos campos del formulario para que tenga todo del DTO *@
-
+                        <div class="mb-3 d-none" id="grupo-nuevo-asesor">
+                            <label for="edit-nuevo-asesor" class="form-label">Nuevo asesor</label>
+                            <select class="form-select" id="edit-nuevo-asesor" name="IdSupervisor">
+                                <option value="">Seleccione un asesor</option>
+                                <!-- Este se llena dinámicamente desde JS -->
+                            </select>
+                        </div>
                         <!-- Contraseña (opcional) -->
                         <div class="mb-3">
                             <label for="edit-contrasena" class="form-label">Nueva contraseña (opcional)</label>
@@ -109,7 +114,8 @@
 
 @section Scripts {
     <script src="~/js/Pages/Usuario/UsuariosAdmin.js"></script>
+    <script src="~/js/Pages/Usuario/EditarUsuarioModal.js"></script>
     <script src="~/js/Shared/Utils/FormValidator.js"></script>
     <script src="~/js/Pages/Auth/RegistroView/RegistroUsuariosModal.js"></script>
-    <script src="~/js/Pages/Usuario/EditarUsuarioModal.js"></script>
+    
 }

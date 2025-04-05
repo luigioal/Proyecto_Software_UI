@@ -1,11 +1,11 @@
 ﻿// Función para cargar y renderizar los usuarios
 
-let usuarioActualString = sessionStorage.getItem('usuarioActual');
-let usuarioActual = JSON.parse(usuarioActualString);
-const id = usuarioActual.id;
+//let usuarioActualString = sessionStorage.getItem('usuarioActual');
+//let usuarioActual = JSON.parse(usuarioActualString);
+//const id = usuarioActual.id;
 
 document.addEventListener('DOMContentLoaded', function () {
-    const idAdmin = id;
+    const idAdmin = 1;
     // Referencia al contenedor donde se renderizarán las filas
     const userRowsContainer = document.querySelector('.user-mgmt-content');
     const loadingIndicator = document.createElement('div');
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //}
             console.log(result)
             const resultados = filtrarResultados(result);
-            renderUsuarios(resultados);
+            renderUsuarios(result);
         }
         ).fail(function (error) {
             console.error('Error al obtener usuarios:', error);
