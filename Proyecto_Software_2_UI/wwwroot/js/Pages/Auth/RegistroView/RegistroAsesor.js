@@ -18,7 +18,7 @@
 
 function RegistroAsesor() {
     this.SubmitRegistroRequest = function () {
-        let api_url = "http://localhost:5058";
+        let api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Usar FormData ya que el backend espera [FromForm]
         const formData = new FormData();

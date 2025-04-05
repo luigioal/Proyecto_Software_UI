@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(idAsesor);
     // Configuración de API endpoints
     const API = {
-        asesorInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
-        clientes: `http://localhost:5058/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
+        asesorInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
+        clientes: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
         rendimientos: 'api/Rendimiento/ObtenerRendimientoAsesores'
     };
 
