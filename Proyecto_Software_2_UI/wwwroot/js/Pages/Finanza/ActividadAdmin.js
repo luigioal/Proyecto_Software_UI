@@ -1,6 +1,10 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
+let usuarioActualString = sessionStorage.getItem('usuarioActual');
+let usuarioActual = JSON.parse(usuarioActualString);
+const id = usuarioActual.id;
+
 document.addEventListener('DOMContentLoaded', function () {
-    const idAdmin = 2;
+    const idAdmin = id;
     // Configuración de API endpoints
     const API = {
         adminInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAdmin}`,
@@ -95,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return await response.json();
         } catch (error) {
             console.error('Error al cargar rendimientos:', error);
-            mostrarToast('Error al cargar rendimientos', 'error');
+            //mostrarToast('Error al cargar rendimientos', 'error');
 
             // Retornar datos simulados en caso de error
             return Array.from({ length: 12 }, (_, i) => {

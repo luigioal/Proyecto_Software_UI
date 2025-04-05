@@ -117,7 +117,7 @@
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify(data)
         }).done(function (response) {
-            console.log("✅ ValidarOTP - Success!", response);
+            console.log("ValidarOTP - Success!", response);
 
             if (response.success) {
                 // Guardar el correo en sessionStorage para uso en otras pantallas
@@ -134,21 +134,40 @@
                 }).then(() => {
                     if (origen === 'recuperar') {
                         window.location.href = `/Auth/NuevaContrasena?correo=${response.email}`;
-                    } else if (sessionStorage.getItem('userEmail') !== null) {
+                    } else
+                    {
+
+
+                        $.ajax({
+                            method: "POST",
+                            url: `${api_url}/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
+                            contentType: "application/json;charset=utf-8"
+                        }).done(function (usuario) {
+                            console.log("Usuario encontrado:", usuario);
+
+                            // Guardar el usuario completo en sessionStorage
+                            sessionStorage.setItem('usuarioActual', JSON.stringify(usuario));
+
+                            
+                                // Redirigir según el tipo de usuario
+                                if (usuario.tipo === "Cliente") {
+                                    window.location.href = "/Finanza/ActividadCliente";
+                                } else if (usuario.tipo === "Administrador") {
+                                    window.location.href = "/Finanza/ActividadAdmin";
+                                } else if (usuario.tipo === "Asesor") {
+                                    window.location.href = "/Finanza/ActividadAsesor";
+                                } else {
+                                    console.log("Tipo de usuario desconocido:", usuario.tipo);
+                                    //window.location.href = "/Auth/Login"; // Fallback
+                                }
+                            
+                        });
 
 
 
-                        // Por defecto o si origen es 'login'
-
-                        //usando el useremail buscar el tipo de usuario y hace run if.
-
-                        //if tipo == Cliente redirigir a /Home/IndexCliente
-                        //if tipo == Admin redirigir a /Finanza/ActividadAdmin
-
-                        window.location.href = "/Home/Index";
-                    } else {
-                        console.log("Error de inicio de session.");
                     }
+
+                     
                 });
             } else {
                 Swal.fire({

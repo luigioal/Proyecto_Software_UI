@@ -1,6 +1,12 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
+
+let usuarioActualString = sessionStorage.getItem('usuarioActual');
+let usuarioActual = JSON.parse(usuarioActualString);
+const id = usuarioActual.id;
+
 document.addEventListener('DOMContentLoaded', function () {
-    const idAsesor = 23;
+    const idAsesor = id;
+    console.log(idAsesor);
     // Configuración de API endpoints
     const API = {
         asesorInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
