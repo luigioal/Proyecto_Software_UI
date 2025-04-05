@@ -13,8 +13,8 @@
     const roleAdmin = document.getElementById('roleAdmin');
 
     // Campos específicos por rol
-    const asesorFields = document.querySelector('.asesor-fields');
-    const adminFields = document.querySelector('.admin-fields');
+    //const asesorFields = document.querySelector('.asesor-fields');
+    //const adminFields = document.querySelector('.admin-fields');
     const clienteFields = document.querySelectorAll('.cliente-fields');
     const tipoUsuarioInput = document.getElementById('tipoUsuario');
     const correoAsesor = document.querySelector('.input-email-asesor');
@@ -22,13 +22,13 @@
     // Gestionar cambio de roles
     function handleRoleChange() {
         // Ocultar todos los campos específicos
-        asesorFields.style.display = 'none';
-        adminFields.style.display = 'none';
+        //asesorFields.style.display = 'none';
+        //adminFields.style.display = 'none';
         clienteFields.forEach(field => { field.style.display = 'none'; });
 
         // Mostrar campos según el rol seleccionado
         if (roleAsesor.checked) {
-            asesorFields.style.display = 'block';
+            //asesorFields.style.display = 'block';
             tipoUsuarioInput.value = 'asesor';
         } else if (roleAdmin.checked) {
             adminFields.style.display = 'block';
@@ -40,7 +40,7 @@
     }
     // Assignar event listener para revision de correo de asesor
     correoAsesor.addEventListener('focusout', function (e) {
-        let api_url = "http://localhost:5058";
+        let api_url = "https://proyecto-software-2.azurewebsites.net";
         //console.log('Hola me ves');
         //console.log(e.currentTarget.value);
         //$.ajax({
@@ -159,7 +159,7 @@
 
 function RegistroAsesor() {
     this.SubmitRegistroRequest = function () {
-        let api_url = "http://localhost:5058";
+        let api_url = "https://proyecto-software-2.azurewebsites.net";
 
         const formData = new FormData();
         formData.append("Nombre", $('#input-nombre').val());
@@ -200,7 +200,7 @@ function RegistroCliente() {
     this.SubmitRegistroRequest = function () {
         let idSupervisor = buscar
 
-        let api_url = "http://localhost:5058";
+        let api_url = "https://proyecto-software-2.azurewebsites.net";
 
         const formData = new FormData();
         formData.append("IdSupervisor", $('#input-').val());
@@ -243,7 +243,7 @@ function RegistroCliente() {
 function buscarSuperDeUsuario(idUsuario) {
     let idSuper = 0;
     $.ajax({
-        url: "http://localhost:5058/api/Usuario/BuscarUsuarioPorEmail?",
+        url: "https://proyecto-software-2.azurewebsites.net/api/Usuario/BuscarUsuarioPorEmail?",
         method: "GET",
         contentType: "application/json:charset=utf-8",
         dataType: "json"
