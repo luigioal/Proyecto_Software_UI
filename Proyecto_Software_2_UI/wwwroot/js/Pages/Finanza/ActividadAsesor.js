@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const API = {
         asesorInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
         clientes: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
-        rendimientos: 'api/Rendimiento/ObtenerRendimientoAsesores'
+        rendimientos: '/api/Rendimiento/ObtenerRendimientoAsesores'
     };
 
     // Referencias a elementos DOM
