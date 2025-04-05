@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para obtener un usuario específico
     function fetchUsuarioEditar(userId, callback) {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
             url: `${api_url}/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para enviar los datos actualizados al servidor
     function actualizarUsuario(usuario) {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Mostrar indicador de carga
         mostrarCargandoModal("Actualizando usuario...");

@@ -22,7 +22,7 @@
             nuevaContrasena: nuevaContrasena
         };
 
-        let api_url = "http://localhost:5058"; // Asegúrate que sea tu puerto correcto
+        let api_url = "https://proyecto-software-2.azurewebsites.net"; 
 
         $.ajax({
             url: api_url + "/api/Seguridad/CambiarContrasena",

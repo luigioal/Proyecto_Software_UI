@@ -33,7 +33,7 @@
 
     // Función para generar OTP
     function generarOTP(email) {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Mostrar indicador de carga
         Swal.fire({
@@ -78,7 +78,7 @@
 
     // Función para validar OTP
     function validarOTP() {
-        const api_url = "http://localhost:5058";
+        const api_url = "proyecto-software-2.azurewebsites.net";
 
         const data = {
             email: document.getElementById('input-correo').value,

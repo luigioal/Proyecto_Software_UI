@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Configuración de API endpoints
     const API = {
-        clienteInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idCliente}`,
-        inversionesActivas: `http://localhost:5058/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Activo`,
-        inversionesVendidas: `http://localhost:5058/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Venta`,
+        clienteInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idCliente}`,
+        inversionesActivas: `https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Activo`,
+        inversionesVendidas: `https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Venta`,
     };
 
     // Referencias a elementos DOM
