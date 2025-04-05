@@ -1,4 +1,9 @@
-﻿@section Scripts {
+﻿@{
+    ViewData["Title"] = "Actividad Cliente";
+    Layout = "_ClienteLayout";
+}
+
+@section Scripts {
     <script src="~/js/Pages/Finanza/ActividadCliente.js"></script>
 }
 
@@ -20,11 +25,11 @@
 
     <div class="dashboard-content">
         <div class="dashboard-section">
-            <h2 class="dashboard-section-title">Mis inversiones</h2>
+            <h2 class="dashboard-section-title">Mis Inversiones</h2>
 
             <div class="activity-list">
                 <div class="activity-header">
-                    <div class="activity-header-label">Asset</div>
+                    <div class="activity-header-label">Activo</div>
                     <div class="activity-header-label">Simbolo</div>
                     <div class="activity-header-label">Cantidad</div>
                     <div class="activity-header-label">Precio</div>

@@ -1,33 +1,35 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
+
 let usuarioActualString = sessionStorage.getItem('usuarioActual');
 let usuarioActual = JSON.parse(usuarioActualString);
 const id = usuarioActual.id;
 
 document.addEventListener('DOMContentLoaded', function () {
-    const idAdmin = id;
+    const idAsesor = id;
+    console.log(idAsesor);
     // Configuración de API endpoints
     const API = {
-        adminInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAdmin}`,
-        asesores: `http://localhost:5058/api/Usuario/ObtenerAsesoresPorAdmin?idAdmin=${idAdmin}`,
+        asesorInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
+        clientes: `http://localhost:5058/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
         rendimientos: 'api/Rendimiento/ObtenerRendimientoAsesores'
     };
 
     // Referencias a elementos DOM
     const elements = {
-        adminPicture: document.querySelector('.dashboard-avatar-img'),
-        adminName: document.querySelector('.dashboard-user-name'),
-        adminDate: document.querySelector('.dashboard-user-meta'),
-        asesorList: document.querySelector('.activity-list-container'),
-        asesorSelect: document.querySelector('.performance-select'),
+        asesorPicture: document.querySelector('.dashboard-avatar-img'),
+        asesorName: document.querySelector('.dashboard-user-name'),
+        asesorDate: document.querySelector('.dashboard-user-meta'),
+        clienteList: document.querySelector('.activity-list-container'),
+        clienteSelect: document.querySelector('.performance-select'),
         chartContainer: document.querySelector('.chart-container'),
         chartCaption: document.querySelector('.chart-caption')
     };
 
     // Estado de la aplicación
     let state = {
-        adminInfo: null,
-        asesores: [],
-        selectedAsesor: 'todos'
+        asesorInfo: null,
+        clientes: [],
+        selectedCliente: 'todos'
     };
 
     // Inicializar carga de datos
@@ -39,19 +41,19 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarCargando();
 
             // Cargar datos de administrador y asesores en paralelo
-            const [adminInfo, asesores] = await Promise.all([
-                fetchAdminInfo(),
-                fetchAsesores()
+            const [asesorInfo, clientes] = await Promise.all([
+                fetchAsesorInfo(),
+                fetchClientes()
             ]);
 
             // Guardar datos en el estado
-            state.adminInfo = adminInfo;
-            state.asesores = asesores;
+            state.asesorInfo = asesorInfo;
+            state.clientes = clientes;
 
             // Renderizar información
-            renderizarInfoAdmin(adminInfo);
-            renderizarAsesores(asesores);
-            inicializarSelectorAsesores(asesores);
+            renderizarInfoAsesor(asesorInfo);
+            renderizarClientes(clientes);
+            inicializarSelectorClientes(clientes);
 
             // Cargar rendimientos iniciales (todos los asesores)
             await cargarYRenderizarGrafico('todos');
@@ -66,31 +68,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Funciones para obtener datos
-    async function fetchAdminInfo() {
+    async function fetchAsesorInfo() {
         try {
-            const response = await fetch(API.adminInfo);
+            const response = await fetch(API.asesorInfo);
             if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
             return await response.json();
         } catch (error) {
             console.error('Error al obtener información del administrador:', error);
             // Retornar datos por defecto en caso de error
             return {
-                nombre: 'Administrador',
+                nombre: 'Asesor',
                 fechaRegistro: new Date().toISOString()
             };
         }
     }
 
-    async function fetchAsesores() {
-        const response = await fetch(API.asesores);
+    async function fetchClientes() {
+        const response = await fetch(API.clientes);
         if (!response.ok) throw new Error(`Error al cargar asesores: ${response.status}`);
         return await response.json();
     }
 
-    async function fetchRendimientos(asesorId) {
+    async function fetchRendimientos(clienteId) {
         try {
-            const url = asesorId && asesorId !== 'todos'
-                ? `${API.rendimientos}?asesorId=${asesorId}`
+            const url = clienteId && clienteId !== 'todos'
+                ? `${API.rendimientos}?asesorId=${clienteId}`
                 : API.rendimientos;
 
             const response = await fetch(url);
@@ -99,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return await response.json();
         } catch (error) {
             console.error('Error al cargar rendimientos:', error);
-            //mostrarToast('Error al cargar rendimientos', 'error');
+            mostrarToast('Error al cargar rendimientos', 'error');
 
             // Retornar datos simulados en caso de error
             return Array.from({ length: 12 }, (_, i) => {
@@ -110,87 +112,88 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Funciones de renderizado
-    function renderizarInfoAdmin(adminInfo) {
-        if (!adminInfo) return;
-        elements.adminPicture.src = adminInfo.fotoPerfil;
-        elements.adminName.textContent = adminInfo.nombre + " " + adminInfo.primerApellido || 'Administrador';
-        elements.adminDate.textContent = `Administrador(a) desde: ${formatearFecha(adminInfo.fechaRegistro)}`;
+    function renderizarInfoAsesor(asesorInfo) {
+        if (!asesorInfo) return;
+        elements.asesorPicture.src = asesorInfo.fotoPerfil;
+        elements.asesorName.textContent = asesorInfo.nombre + " " + asesorInfo.primerApellido || 'Asesor';
+        elements.asesorDate.textContent = `Asesor(a) desde: ${formatearFecha(asesorInfo.fechaRegistro)}`;
     }
 
-    function renderizarAsesores(asesores) {
-        if (!elements.asesorList) return;
+    function renderizarClientes(clientes, numeroActivos, numeroVentas) {
+        console.log(clientes)
+        if (!elements.clienteList) return;
 
-        if (!asesores || asesores.length === 0) {
-            elements.asesorList.innerHTML = '<div class="empty-state">No hay asesores disponibles</div>';
+        if (!clientes || clientes.length === 0) {
+            elements.clienteList.innerHTML = '<div class="empty-state">No hay clientes disponibles</div>';
             return;
         }
 
-        elements.asesorList.innerHTML = asesores.map(asesor => { console.log("Aqui " + JSON.stringify(asesor)); return generarHtmlAsesor(asesor)}).join('');
+        elements.clienteList.innerHTML = clientes.map(cliente => { console.log("Aqui " + JSON.stringify(cliente)); return generarHtmlCliente(cliente, numeroActivos, numeroVentas) }).join('');
     }
 
-    function generarHtmlAsesor(asesor) {
+    function generarHtmlCliente(cliente, numeroInversiones) {
         return `
             <div class="activity-item">
-                <div class="activity-id">${asesor.id || ''}</div>
+                <div class="activity-id">${cliente.id || ''}</div>
                 <div class="activity-name">
                     <div class="activity-icon">
-                        <img src="${asesor.fotoPerfil}" alt="Foto de perfil" class="dashboard-avatar-img"/>
+                        <img src="${cliente.fotoPerfil}" alt="Foto de perfil" class="dashboard-avatar-img"/>
                     </div>
                     <div class="activity-name-text">
-                        ${asesor.nombre + " " + asesor.primerApellido + " " + asesor.segundoApellido || ''}
+                        ${cliente.nombre + " " + cliente.primerApellido + " " + cliente.segundoApellido || ''}
                     </div>
                 </div>
-                <div class="activity-value ${(asesor.clientes > 10) ? 'highlight' : ''}">
-                    ${asesor.clientes || 0} ${(asesor.clientes === 1) ? 'cliente' : 'clientes'}
+                <div class="activity-value ${(cliente.clientes > 10) ? 'highlight' : ''}">
+                    ${numeroInversiones || 0} ${(numeroInversiones === 1) ? 'activo' : 'activos'}
                 </div>
-                <div class="activity-access">${formatearFecha(asesor.ultimoAcceso)}</div>
-                <div class="activity-commission">$${asesor.comisiones || 0}</div>
+                <div class="activity-access">${formatearFecha(cliente.ultimoAcceso)}</div>
+                <div class="activity-commission">$${cliente.saldo || 0}</div>
             </div>
         `;
     }
 
-    function inicializarSelectorAsesores(asesores) {
-        if (!elements.asesorSelect) return;
+    function inicializarSelectorClientes(clientes) {
+        if (!elements.clienteSelect) return;
 
         // Opción por defecto ya existe en el HTML
 
         // Agregar opciones para cada asesor
-        if (asesores && asesores.length > 0) {
+        if (clientes && clientes.length > 0) {
             // Limpiar opciones existentes excepto la primera
-            elements.asesorSelect.innerHTML = '<option value="todos"><label class="performance-select-label">Todos los asesores</label></option>';
+            elements.clienteSelect.innerHTML = '<option value="todos"><label class="performance-select-label">Todos los clientes</label></option>';
 
             // Agregar nuevas opciones
-            asesores.forEach(asesor => {
-                elements.asesorSelect.innerHTML += `
-                    <option value="${asesor.id || asesor.usuarioId}">
-                        ${asesor.nombre}
+            clientes.forEach(cliente => {
+                elements.clienteSelect.innerHTML += `
+                    <option value="${cliente.id || cliente.usuarioId}">
+                        ${cliente.nombre}
                     </option>
                 `;
             });
         }
     }
 
-    async function cargarYRenderizarGrafico(asesorId) {
+    async function cargarYRenderizarGrafico(clienteId) {
         try {
             // Guardar asesor seleccionado en el estado
-            state.selectedAsesor = asesorId;
+            state.selectedCliente = clienteId;
 
             // Mostrar cargando en el contenedor del gráfico
             elements.chartContainer.innerHTML = '<div class="loading">Cargando gráfico...</div>';
 
             // Obtener datos de rendimiento
-            const datosRendimiento = await fetchRendimientos(asesorId);
+            const datosRendimiento = await fetchRendimientos(clienteId);
 
-            // Obtener nombre del asesor para el título
-            const nombreAsesor = asesorId === 'todos'
+            // Obtener nombre del cliente para el título
+            const nombreCliente = clienteId === 'todos'
                 ? 'Todos los asesores'
-                : state.asesores.find(a => (a.id || a.usuarioId) == asesorId)?.nombre || 'Asesor seleccionado';
+                : state.clientes.find(a => (a.id || a.usuarioId) == clienteId)?.nombre || 'Asesor seleccionado';
 
             // Actualizar título del gráfico
             if (elements.chartCaption) {
-                elements.chartCaption.textContent = nombreAsesor === 'Todos los asesores'
+                elements.chartCaption.textContent = nombreCliente === 'Todos los asesores'
                     ? 'Clientes'
-                    : `Clientes de ${nombreAsesor}`;
+                    : `Clientes de ${nombreCliente}`;
             }
 
             // Renderizar gráfico
@@ -345,9 +348,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar eventos de interacción
     function inicializarEventos() {
-        // Evento de cambio en selector de asesores
-        if (elements.asesorSelect) {
-            elements.asesorSelect.addEventListener('change', function () {
+        // Evento de cambio en selector de clientes
+        if (elements.clienteSelect) {
+            elements.clienteSelect.addEventListener('change', function () {
                 cargarYRenderizarGrafico(this.value);
             });
         }
@@ -358,20 +361,20 @@ document.addEventListener('DOMContentLoaded', function () {
             header.style.cursor = 'pointer';
             header.addEventListener('click', function () {
                 const columnIndex = Array.from(headerLabels).indexOf(this);
-                const asesoresOrdenados = ordenarAsesores(state.asesores, columnIndex);
-                renderizarAsesores(asesoresOrdenados);
+                const clientesOrdenados = ordenarClientes(state.clientes, columnIndex);
+                renderizarAsesores(clientesOrdenados);
 
                 // Mostrar notificación
-                const columnas = ['ID', 'Asesor', 'Clientes', 'Último acceso', 'Comisiones'];
+                const columnas = ['ID', 'Nombre', 'Activos', 'Último acceso', 'Balance'];
                 mostrarToast(`Ordenado por ${columnas[columnIndex]}`);
             });
         });
     }
 
-    function ordenarAsesores(asesores, columnIndex) {
-        if (!asesores || !Array.isArray(asesores)) return asesores;
+    function ordenarClientes(clientes, columnIndex) {
+        if (!clientes || !Array.isArray(clientes)) return clientes;
 
-        let sortedData = [...asesores];
+        let sortedData = [...clientes];
 
         switch (columnIndex) {
             case 0: // ID

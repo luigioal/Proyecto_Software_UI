@@ -114,7 +114,7 @@
 }
 
 .activity-header-label {
-    /*    border: 1px solid black;*/
+/*    border: 1px solid black;*/
     font-size: 14px;
     color: #6b7280;
     font-weight: 500;
@@ -159,8 +159,8 @@
 }
 
 .activity-name {
-    display: flex;
-    /*    border: 1px solid black;*/
+    display:flex;
+/*    border: 1px solid black;*/
     display: flex;
     font-weight: 500;
     color: #374151;
@@ -168,7 +168,7 @@
 }
 
 .activity-name-text {
-    /*    border: 1px solid black;*/
+/*    border: 1px solid black;*/
     margin-left: 10%;
     width: 75%;
     display: flex;
@@ -188,7 +188,7 @@
 }
 
 .activity-value {
-    /*    border: 1px solid black;*/
+/*    border: 1px solid black;*/
     font-size: 15px;
     text-align: center;
     color: #4b5563;
@@ -197,7 +197,7 @@
 }
 
 .activity-access {
-    /*    border: 1px solid black;*/
+/*    border: 1px solid black;*/
     font-size: 15px;
     text-align: center;
     color: #4b5563;
@@ -205,7 +205,7 @@
 }
 
 .activity-commission {
-    /*    border: 1px solid black;*/
+/*    border: 1px solid black;*/
     font-size: 15px;
     text-align: center;
     font-weight: 500;
@@ -257,7 +257,7 @@
     cursor: pointer;
 }
 
-.performance-select-label{
+.performance-select-label {
     background-color: red;
     margin-right: 50px;
     font-size: 40px;
@@ -330,3 +330,41 @@
         max-height: 250px;
     }
 }
+
+.header-title-registro {
+    margin-left: 0.1em;
+    margin-bottom: 2em;
+    width: 98%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.dashboard-section-title {
+/*    border: 1px solid black;*/
+    margin: 0;
+    width: 100%;
+}
+
+
+.user-mgmt-register-button {
+    background-color: #188754;
+    color: #ffffff;
+    border: 1px solid #222222;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+}
+
+    .user-mgmt-register-button:hover {
+        text-decoration: none;
+        background-color: #222222;
+        border-color: #111111;
+    }

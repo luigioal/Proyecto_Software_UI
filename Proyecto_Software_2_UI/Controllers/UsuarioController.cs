@@ -6,7 +6,9 @@ namespace Proyecto_Software_2_UI.Controllers
     {
         public IActionResult UsuariosAdmin()
         {
+            //ViewData["Layout"] = "_AdminLayout";
             return View();
         }
+
     }
 }
