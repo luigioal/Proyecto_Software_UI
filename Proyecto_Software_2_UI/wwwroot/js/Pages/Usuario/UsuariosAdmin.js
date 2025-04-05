@@ -1,6 +1,11 @@
 ﻿// Función para cargar y renderizar los usuarios
+
+let usuarioActualString = sessionStorage.getItem('usuarioActual');
+let usuarioActual = JSON.parse(usuarioActualString);
+const id = usuarioActual.id;
+
 document.addEventListener('DOMContentLoaded', function () {
-    const idAdmin = 2;
+    const idAdmin = id;
     // Referencia al contenedor donde se renderizarán las filas
     const userRowsContainer = document.querySelector('.user-mgmt-content');
     const loadingIndicator = document.createElement('div');
