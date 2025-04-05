@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Call API to delete user
                 var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `api/Usuario/EliminarUsuario?idUsuario=${userId}`,
+                    url: api_url + `/api/Usuario/EliminarUsuario?idUsuario=${userId}`,
                     method: 'DELETE'
                 }).done(function () {
                     // Remove the row from UI
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var api_url = "https://proyecto-software-2.azurewebsites.net";
                 console.log(userId, roleName);
                 $.ajax({
-                    url: api_url + `api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
+                    url: api_url + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.classList.toggle('user-mgmt-checkbox-active');
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //Enviar instruccion al backend para cambiar estado del usuario
                 var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
+                    url: api_url + `/api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.checked = !entity.checked;
