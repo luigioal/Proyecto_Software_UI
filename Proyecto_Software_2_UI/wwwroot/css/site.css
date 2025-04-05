@@ -12,6 +12,19 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+.navbar-stockflow {
+    background-color: #D97706 !important; /* Café anaranjado del logo */
+}
+.navbar-stockflow .nav-link,
+.navbar-stockflow .navbar-brand {
+    color: #ffffff !important;
+
+}
+
+.navbar-stockflow .nav-link:hover {
+      color: #ffdd99 !important; /* Un tono suave al hacer hover */
+}
+
 html {
   position: relative;
   min-height: 100%;
