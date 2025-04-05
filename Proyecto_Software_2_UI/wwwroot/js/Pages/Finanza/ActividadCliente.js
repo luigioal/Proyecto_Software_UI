@@ -1,6 +1,5 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
 document.addEventListener('DOMContentLoaded', function () {
-    const idAsesor = 23;
     const idCliente = 41; // ID del cliente, se puede obtener dinámicamente si es necesario
 
     // Configuración de API endpoints

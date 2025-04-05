@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         elements.asesorDate.textContent = `Asesor(a) desde: ${formatearFecha(asesorInfo.fechaRegistro)}`;
     }
 
-    function renderizarClientes(clientes) {
+    function renderizarClientes(clientes, numeroActivos, numeroVentas) {
         console.log(clientes)
         if (!elements.clienteList) return;
 
@@ -122,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        elements.clienteList.innerHTML = clientes.map(cliente => { console.log("Aqui " + JSON.stringify(cliente)); return generarHtmlCliente(cliente) }).join('');
+        elements.clienteList.innerHTML = clientes.map(cliente => { console.log("Aqui " + JSON.stringify(cliente)); return generarHtmlCliente(cliente, numeroActivos, numeroVentas) }).join('');
     }
 
-    function generarHtmlCliente(cliente) {
+    function generarHtmlCliente(cliente, numeroInversiones) {
         return `
             <div class="activity-item">
                 <div class="activity-id">${cliente.id || ''}</div>
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
                 <div class="activity-value ${(cliente.clientes > 10) ? 'highlight' : ''}">
-                    ${cliente.clientes || 0} ${(cliente.clientes === 1) ? 'activo' : 'activos'}
+                    ${numeroInversiones || 0} ${(numeroInversiones === 1) ? 'activo' : 'activos'}
                 </div>
                 <div class="activity-access">${formatearFecha(cliente.ultimoAcceso)}</div>
                 <div class="activity-commission">$${cliente.saldo || 0}</div>
