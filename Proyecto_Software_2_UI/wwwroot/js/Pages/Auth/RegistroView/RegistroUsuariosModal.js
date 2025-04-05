@@ -159,7 +159,7 @@
 
 function RegistroAsesor() {
     this.SubmitRegistroRequest = function () {
-        let api_url = "proyecto-software-2.azurewebsites.net";
+        let api_url = "https://proyecto-software-2.azurewebsites.net";
 
         const formData = new FormData();
         formData.append("Nombre", $('#input-nombre').val());

@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //async function fetchUsuario(userId, callbackFunction) {
     //    return $.ajax({
-    //        url: `proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+    //        url: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
     //        method: "GET",
     //        contentType: "application/json:charset=utf-8",
     //        dataType: "json"
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //async function fetchUsuario(userId, callbackFunction) {
     //    return $.ajax({
-    //        url: `proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+    //        url: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
     //        method: "GET",
     //        contentType: "application/json:charset=utf-8",
     //        dataType: "json"
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Call API to delete user
-                var api_url = "proyecto-software-2.azurewebsites.net";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
                     url: api_url + `api/Usuario/EliminarUsuario?idUsuario=${userId}`,
                     method: 'DELETE'
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 //Enviar instruccion al backend sobre el rol del usuario
-                var api_url = "proyecto-software-2.azurewebsites.net";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 console.log(userId, roleName);
                 $.ajax({
                     url: api_url + `api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const sendEmail = !entity.checked ? false : document.getElementById('send-activation-email')?.checked || false;
 
                 //Enviar instruccion al backend para cambiar estado del usuario
-                var api_url = "proyecto-software-2.azurewebsites.net";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
                     url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
                     method: 'PUT'
