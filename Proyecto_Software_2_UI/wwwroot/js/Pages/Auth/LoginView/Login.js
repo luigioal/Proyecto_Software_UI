@@ -14,7 +14,7 @@
 
     // Función principal de autenticación
     function handleLogin() {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
         const email = document.getElementById('input-email').value;
         const password = document.querySelector('input[name="password"]').value;
 
@@ -44,7 +44,7 @@
 
     // Función para validar la contraseña
     function validatePassword(email, password) {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
             method: "POST",

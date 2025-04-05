@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Configuración de API endpoints
     const API = {
-        cargosExtra: "http://localhost:5058/api/Transaccion/ObtenerCargosExtra",
-        modificarCargosExtra: "http://localhost:5058/api/Transaccion/ModificarCargosExtra"
+        cargosExtra: "https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerCargosExtra",
+        modificarCargosExtra: "https://proyecto-software-2.azurewebsites.net/api/Transaccion/ModificarCargosExtra"
     };
 
     // Estado de la aplicación

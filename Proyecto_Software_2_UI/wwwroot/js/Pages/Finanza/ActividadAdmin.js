@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const idAdmin = id;
     // Configuración de API endpoints
     const API = {
-        adminInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAdmin}`,
-        asesores: `http://localhost:5058/api/Usuario/ObtenerAsesoresPorAdmin?idAdmin=${idAdmin}`,
+        adminInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idAdmin}`,
+        asesores: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerAsesoresPorAdmin?idAdmin=${idAdmin}`,
         rendimientos: 'api/Rendimiento/ObtenerRendimientoAsesores'
     };
 

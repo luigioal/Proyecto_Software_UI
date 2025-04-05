@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para obtener los datos de los usuarios
     async function fetchUsuarios() {
         $.ajax({
-            url: "http://localhost:5058/api/Usuario/ObtenerUsuarios",
+            url: "https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuarios",
             method: "GET",
             contentType: "application/json:charset=utf-8",
             dataType: "json"
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //async function fetchUsuario(userId, callbackFunction) {
     //    return $.ajax({
-    //        url: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+    //        url: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
     //        method: "GET",
     //        contentType: "application/json:charset=utf-8",
     //        dataType: "json"
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //async function fetchUsuario(userId, callbackFunction) {
     //    return $.ajax({
-    //        url: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+    //        url: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
     //        method: "GET",
     //        contentType: "application/json:charset=utf-8",
     //        dataType: "json"
@@ -301,9 +301,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Call API to delete user
-                var api_url = "http://localhost:5058/";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `api/Usuario/EliminarUsuario?idUsuario=${userId}`,
+                    url: api_url + `/api/Usuario/EliminarUsuario?idUsuario=${userId}`,
                     method: 'DELETE'
                 }).done(function () {
                     // Remove the row from UI
@@ -372,10 +372,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 //Enviar instruccion al backend sobre el rol del usuario
-                var api_url = "http://localhost:5058/";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 console.log(userId, roleName);
                 $.ajax({
-                    url: api_url + `api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
+                    url: api_url + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.classList.toggle('user-mgmt-checkbox-active');
@@ -448,9 +448,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const sendEmail = !entity.checked ? false : document.getElementById('send-activation-email')?.checked || false;
 
                 //Enviar instruccion al backend para cambiar estado del usuario
-                var api_url = "http://localhost:5058/";
+                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
+                    url: api_url + `/api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.checked = !entity.checked;

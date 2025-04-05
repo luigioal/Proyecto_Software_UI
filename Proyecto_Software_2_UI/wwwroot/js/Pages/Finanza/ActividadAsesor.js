@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(idAsesor);
     // Configuración de API endpoints
     const API = {
-        asesorInfo: `http://localhost:5058/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
-        clientes: `http://localhost:5058/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
-        rendimientos: 'api/Rendimiento/ObtenerRendimientoAsesores'
+        asesorInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
+        clientes: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
+        rendimientos: '/api/Rendimiento/ObtenerRendimientoAsesores'
     };
 
     // Referencias a elementos DOM
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return await response.json();
         } catch (error) {
             console.error('Error al cargar rendimientos:', error);
-            mostrarToast('Error al cargar rendimientos', 'error');
+            //mostrarToast('Error al cargar rendimientos', 'error');
 
             // Retornar datos simulados en caso de error
             return Array.from({ length: 12 }, (_, i) => {
