@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadingIndicator = document.createElement('div');
     loadingIndicator.className = 'text-center py-3';
     loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>';
+    state = [];
 
     // Función para obtener los datos de los usuarios
     async function fetchUsuarios() {
@@ -69,6 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 clientesFiltrados.push(resultado);
             }
         });
+        state.asesores = asesoresFiltrados;
+        state.admins = adminsFiltrados;
+        state.clientes = clientesFiltrados;
+
 
         // Return combined array (no duplicates)
         return [...adminsFiltrados, ...asesoresFiltrados, ...clientesFiltrados];
@@ -418,9 +423,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const actionText = !entity.checked ? 'desactivar' : 'activar';
 
+        // Only show email checkbox when activating a user (not when deactivating)
+        const emailCheckboxHtml = !entity.checked ? '' : `
+        <div class="mt-4 text-left">
+            <input type="checkbox" id="send-activation-email" checked>
+            <label for="send-activation-email" class="ml-2">Enviar correo de activación al usuario</label>
+        </div>
+    `;
+
         Swal.fire({
             title: `¿${actionText.charAt(0).toUpperCase() + actionText.slice(1)} la cuenta de ${userName}?`,
-            html: `¿Estás seguro que deseas ${actionText} la cuenta de <b>${userName}</b>?`,
+            html: `¿Estás seguro que deseas ${actionText} la cuenta de <b>${userName}</b>?${emailCheckboxHtml}`,
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
             cancelButtonText: 'No',
@@ -431,10 +444,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
+                // Check if the email checkbox is checked (only when activating)
+                const sendEmail = !entity.checked ? false : document.getElementById('send-activation-email')?.checked || false;
+
                 //Enviar instruccion al backend para cambiar estado del usuario
                 var api_url = "http://localhost:5058/";
                 $.ajax({
-                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}`,
+                    url: api_url + `api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.checked = !entity.checked;
@@ -450,9 +466,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     deleteIcon.classList.toggle('can-delete');
                     entity.classList.toggle('user-mgmt-checkbox-active');
+
+                    // Update success message to include email status if an activation email was sent
+                    let successMessage = `La cuenta de ${userName} ha sido ${!entity.checked ? 'desactivada' : 'activada'} correctamente.`;
+                    if (sendEmail) {
+                        successMessage += `<br><br>Se ha enviado un correo de activación al usuario.`;
+                    }
+
                     Swal.fire({
                         title: 'Completado',
-                        html: `La cuenta de ${userName} ha sido ${!entity.checked ? 'deactivada' : 'activada'} correctamente.`,
+                        html: successMessage,
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
                         timer: 3500,
@@ -464,12 +487,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }).fail(function () {
                     Swal.fire({
                         title: "Message",
-                        text: "Hubo un erro al llamar al API",
+                        text: "Hubo un error al llamar al API",
                         icon: "error"
                     })
                 })
-            }
 
+            }
         });
     }
 
