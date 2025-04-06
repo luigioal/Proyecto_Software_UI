@@ -33,8 +33,12 @@
                     return;
                 }
 
+                const esDeveloper = response.roles.includes("Dev")//Buscar rol Dev en usuario
+                if (esDeveloper) {
+                    sessionStorage.setItem('usuarioActual', JSON.stringify(response));
+                }
                 // Paso 2: Validar contraseña
-                validatePassword(email, password);
+                validatePassword(email, password, esDeveloper);
             })
             .fail(function (error) {
                 console.error("Error al buscar usuario:", error);
@@ -43,7 +47,7 @@
     }
 
     // Función para validar la contraseña
-    function validatePassword(email, password) {
+    function validatePassword(email, password, esDeveloper) {
         const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
@@ -55,8 +59,16 @@
                 console.log("Validación de contraseña:", response);
 
                 if (response === true) {
-                    // Redirigir a la página de confirmación OTP
-                    window.location.href = `/Auth/ConfirmarOTP?correo=${email}&origen=login`;
+                    if (esDeveloper) {
+                        createBasicCookie("Dev", "true", 7); 
+                        // Redirigir al inicio si es developer
+                        window.location.href = "/Home/IndexAutenticado";
+                    }
+                    else {
+                        // Redirigir a la página de confirmación OTP
+                        window.location.href = `/Auth/ConfirmarOTP?correo=${email}&origen=login`;
+                    }
+                    
                 } else {
                     showError("Correo electrónico o contraseña incorrectos");
                 }
@@ -76,3 +88,13 @@
         });
     }
 });
+
+//Funcion para crear cookie 
+function createBasicCookie(name, value, daysToExpire) {
+    // Create expiration date
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + daysToExpire);
+
+    // Build the cookie string with name=value and expiration
+    document.cookie = `${name}=${value}; path=/; SameSite=Lax; Secure`;
+}
