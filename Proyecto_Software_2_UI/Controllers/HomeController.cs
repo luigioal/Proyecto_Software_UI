@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Software_2_UI.Models;
 
@@ -14,6 +15,11 @@ namespace Proyecto_Software_2_UI.Controllers
         }
         
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult IndexAutenticado()
         {
             return View();
         }
