@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -7,13 +8,28 @@ namespace Proyecto_Software_2_UI.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IWebHostEnvironment _env;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IWebHostEnvironment env, ILogger<HomeController> logger)
         {
+            _env = env;
             _logger = logger;
         }
-        
+
+        // In your Controller
+        [HttpGet("api/config")]
+        public IActionResult GetClientConfig()
+        {
+            var config = new
+            {
+                baseUrl = _env.IsDevelopment()
+                    ? "http://localhost:5058"
+                    : "https://yourapp.azurewebsites.net"
+            };
+            return Ok(config);
+        }
+
         public IActionResult Index()
         {
             return View();
