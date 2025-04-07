@@ -7,7 +7,7 @@ const id = usuarioActual.id;
 document.addEventListener('DOMContentLoaded', function () {
     const idAdmin = id;
     // Referencia al contenedor donde se renderizarán las filas
-    const userRowsContainer = document.querySelector('.user-mgmt-content');
+    let userRowsContainer = document.querySelector('.user-mgmt-content');
     const loadingIndicator = document.createElement('div');
     loadingIndicator.className = 'text-center py-3';
     loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>';
@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
             //else {
             //    throw new Error(`Error HTTP: ${result.message}`);
             //}
-            console.log(result)
-            const resultados = filtrarResultados(result);
-            renderUsuarios(resultados);
+            resultAfter = []
+            resultAfter.push(usuarioActual);
+            result.forEach(item => { if (!(item.id == id)) { resultAfter.push(item) } });
+            renderUsuarios(resultAfter);
         }
         ).fail(function (error) {
             console.error('Error al obtener usuarios:', error);
@@ -139,16 +140,17 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Define which IDs should be grayed out (inactive)
-        const inactiveUserIds = [idAdmin]; // Add your specific IDs here
+        const inactiveUserIds = []; // Add your specific IDs here
 
         usuarios.forEach((usuario, index) => {
             const row = document.createElement('div');
             row.className = 'user-mgmt-row';
             row.setAttribute('data-id', usuario.id);
 
+
             // Check if this user should be inactive
             const isInactive = inactiveUserIds.includes(usuario.id);
+
             if (isInactive) {
                 row.classList.add('user-row-inactive');
             }
@@ -159,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             row.innerHTML = `
-            <div class="user-mgmt-id ${isInactive ? 'text-muted' : ''}">${usuario.id}</div>
+            <div class="user-mgmt-id ${isInactive? 'text-muted' : ''}">${usuario.id}</div>
             <div class="user-mgmt-name ${isInactive ? 'text-muted' : ''}">
                 <div class="user-mgmt-avatar">
                     <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""} 
@@ -168,15 +170,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
             </div>
 
-            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
-                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}">
-                </span>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive || usuario.id == id ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Admin") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"} "></span>
             </div>
-            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
-                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive || usuario.id == id ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Asesor") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"} "></span>
             </div>
-            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive ? "opacity-50" : ""}">
-                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"}"></span>
+            <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive || usuario.id == id ? "opacity-50" : ""}">
+                <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"} "></span>
             </div>
             <div class="user-mgmt-date ${isInactive ? 'text-muted' : ''}">${formatearFecha(usuario.ultimoAcceso)}</div>
             <div class="user-mgmt-edit-icon">
@@ -185,11 +186,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 </svg>
             </div>
             <div class="user-mgmt-actions-container">
-                <label class="user-mgmt-toggle-switch ${isInactive ? 'disabled' : ''}">
-                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""} ${isInactive ? 'disabled' : ''}>
+                <label class="user-mgmt-toggle-switch ${isInactive || usuario.id == id ? 'disabled' : ''}">
+                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""} ${isInactive || usuario.id == id ? 'disabled' : ''}>
                     <span class="user-mgmt-slider ${isInactive ? 'disabled' : ''}"></span>
                 </label>
-                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}" ${isInactive ? 'style="pointer-events: none; opacity: 0.5;"' : ''}>
+                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}" ${isInactive ? 'style="pointer-events: none; opacity: 0.5;"' : ''}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${isInactive ? 'fill="#999"' : ''}>
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                     </svg>
@@ -213,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.user-mgmt-edit-icon').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const userId = e.currentTarget.closest('.user-mgmt-row').getAttribute('data-id');
-                console.log("Editando Usuario ID:", userId);
+                //console.log("Editando Usuario ID:", userId);
 
                 // Usar el módulo de edición para cargar el usuario
                 if (window.EditarUsuarioModal) {
@@ -230,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.querySelectorAll('.user-mgmt-custom-checkbox').forEach(checkbox => {
+
             checkbox.addEventListener('click', function (e) {
                 e.preventDefault();
                 const row = e.currentTarget.closest('.user-mgmt-row');
@@ -242,13 +244,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add event listener for delete bucket icon
         document.querySelectorAll('.user-mgmt-delete-icon').forEach(deleteIcon => {
-            deleteIcon.addEventListener('click', function (e) {
-                e.preventDefault();
-                const userId = this.getAttribute('data-id');
-                const row = this.closest('.user-mgmt-row');
-                const userName = row.querySelector('.user-mgmt-name').textContent.trim();
-                eliminarUsuario(userId, userName);
-            });
+            if (deleteIcon.getAttribute('data-id') != id) {
+                deleteIcon.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-id');
+                    const row = this.closest('.user-mgmt-row');
+                    const userName = row.querySelector('.user-mgmt-name').textContent.trim();
+                    eliminarUsuario(userId, userName);
+                });
+            }
         });
 
         // Additional event to update delete icon visibility when user state changes
@@ -356,46 +360,48 @@ document.addEventListener('DOMContentLoaded', function () {
         const isActive = entity.classList.contains('user-mgmt-checkbox-active');
         const actionText = isActive ? 'quitar' : 'asignar';
 
-        // Show confirmation dialog
-        Swal.fire({
-            title: `¿${isActive ? 'Quitar' : 'Asignar'} rol de ${roleName}?`,
-            html: `¿Estás seguro que deseas ${actionText} el rol de <b>${roleName}</b> al usuario <b>${userName}</b>?`,
-            showCancelButton: true,
-            confirmButton: '<p style="color: blue;">This is a custom message.</p>',
-            confirmButtonText: 'Sí, confirmar',
-            cancelButtonText: 'No',
-            reverseButtons: true,
-            focusCancel: true,
-            customClass: {
-                confirmButton: 'checkbox-custom-confirm-button'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                //Enviar instruccion al backend sobre el rol del usuario
-                var api_url = "https://proyecto-software-2.azurewebsites.net";
-                console.log(userId, roleName);
-                $.ajax({
-                    url: api_url + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
-                    method: 'PUT'
-                }).done(function () {
-                    entity.classList.toggle('user-mgmt-checkbox-active');
-                    Swal.fire({
-                        title: 'Completado',
-                        html: `El rol de ${roleName} ha sido ${isActive ? 'removido de' : 'asignado a'} <b>${userName}</b> correctamente.`,
-                        icon: 'success',
-                        confirmButtonText: 'Aceptar',
-                        timer: 2000,
-                        timerProgressBar: true,
-                    });
-                }).fail(function () {
-                    Swal.fire({
-                        title: "Message",
-                        text: "Hubo un erro al llamar al API",
-                        icon: "error"
+        if (row.getAttribute('data-id') != id) {
+            // Show confirmation dialog
+            Swal.fire({
+                title: `¿${isActive ? 'Quitar' : 'Asignar'} rol de ${roleName}?`,
+                html: `¿Estás seguro que deseas ${actionText} el rol de <b>${roleName}</b> al usuario <b>${userName}</b>?`,
+                showCancelButton: true,
+                confirmButton: '<p style="color: blue;">This is a custom message.</p>',
+                confirmButtonText: 'Sí, confirmar',
+                cancelButtonText: 'No',
+                reverseButtons: true,
+                focusCancel: true,
+                customClass: {
+                    confirmButton: 'checkbox-custom-confirm-button'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //Enviar instruccion al backend sobre el rol del usuario
+                    var api_url = "https://proyecto-software-2.azurewebsites.net";
+                    console.log(userId, roleName);
+                    $.ajax({
+                        url: api_url + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
+                        method: 'PUT'
+                    }).done(function () {
+                        entity.classList.toggle('user-mgmt-checkbox-active');
+                        Swal.fire({
+                            title: 'Completado',
+                            html: `El rol de ${roleName} ha sido ${isActive ? 'removido de' : 'asignado a'} <b>${userName}</b> correctamente.`,
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+                    }).fail(function () {
+                        Swal.fire({
+                            title: "Message",
+                            text: "Hubo un erro al llamar al API",
+                            icon: "error"
+                        })
                     })
-                })
-            }
-        });
+                }
+            });
+        }
     };
 
     function makeVisible(e) {
