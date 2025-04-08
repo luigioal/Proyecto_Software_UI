@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = localStorage.getItem('baseUrl');
     // Inicializar validación para el formulario de login
     FormValidator.inicializar('loginForm');
 
@@ -14,14 +15,13 @@
 
     // Función principal de autenticación
     function handleLogin() {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
         const email = document.getElementById('input-email').value;
         const password = document.querySelector('input[name="password"]').value;
 
         // Paso 1: Buscar usuario por email
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(email)}`,
+            url: baseUrl + `/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(email)}`,
             contentType: "application/json;charset=utf-8"
         })
             .done(function (response) {
@@ -48,11 +48,10 @@
 
     // Función para validar la contraseña
     function validatePassword(email, password, esDeveloper) {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Usuario/ValidarUsuario?email=${encodeURIComponent(email)}&contrasena=${encodeURIComponent(password)}`,
+            url: baseUrl + `/api/Usuario/ValidarUsuario?email=${encodeURIComponent(email)}&contrasena=${encodeURIComponent(password)}`,
             contentType: "application/json;charset=utf-8"
         })
             .done(function (response) {
