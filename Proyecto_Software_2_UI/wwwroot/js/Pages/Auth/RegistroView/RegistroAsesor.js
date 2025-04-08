@@ -1,11 +1,22 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿const baseUrl = localStorage.getItem('baseUrl');
+
+document.addEventListener('DOMContentLoaded', () => {
     FormValidator.inicializar('registroAsesorForm');
     const registroManager = new RegistroAsesor();
-    document.getElementById("registroAsesorForm").addEventListener("submit", function (event) {
+    document.getElementById("registroAsesorForm").addEventListener("submit", async function (event) {
         event.preventDefault();
         if (FormValidator.validarFormulario('registroAsesorForm')) {
-            registroManager.SubmitRegistroRequest();
-            console.log('Formulario válido, enviando datos...');
+            try {
+                await registroManager.SubmitRegistroRequest();
+                console.log('Formulario válido, datos enviados correctamente.');
+            } catch (error) {
+                console.error('Error al enviar formulario:', error);
+                Swal.fire({
+                    title: "Error en el envío",
+                    text: "Ocurrió un error al procesar el formulario: " + error.message,
+                    icon: "error"
+                });
+            }
         } else {
             Swal.fire({
                 title: "Registro incompleto",
@@ -15,13 +26,20 @@
         }
     });
 });
-
 function RegistroAsesor() {
-    this.SubmitRegistroRequest = function () {
-        let api_url = "https://proyecto-software-2.azurewebsites.net";
+    this.SubmitRegistroRequest = async function () { // Added 'async' keyword here
 
         // Usar FormData ya que el backend espera [FromForm]
         const formData = new FormData();
+
+        const fotoPerfil = document.getElementById('input-foto').files[0];
+        try {
+            const urlFoto = await S3Uploader.uploadFile(fotoPerfil);
+            formData.append("FotoPerfil", urlFoto);
+            //console.log('File uploaded to:', fileUrl);
+        } catch (error) {
+            alert('Upload failed: ' + error.message);
+        }
 
         // Obtener valores directamente de los elementos del DOM
         formData.append("Nombre", document.getElementById('input-nombre').value);
@@ -35,11 +53,11 @@ function RegistroAsesor() {
         // Valores hardcodeados
         formData.append("Tipo", "Asesor");
         formData.append("IdSupervisor", 1); // Como string para evitar problemas de conversión
-        formData.append("FotoPerfil", "Test");
+
 
         // Los roles no se pasan al procedimiento almacenado en el backend,
         // pero los incluimos por si son necesarios para el modelo
-        formData.append("Roles", "Asesor");
+        formData.append("Roles", [""]); // Los roles los asigna el admin solo despues de activada la cuenta. Tipo determina el valor por default que toma el usuario despues de activado.
 
         // Para debug: mostrar lo que estamos enviando
         console.log("Enviando el siguiente FormData:");
@@ -55,7 +73,7 @@ function RegistroAsesor() {
 
         $.ajax({
             method: "POST",
-            url: api_url + "/api/Usuario/CrearUsuario",
+            url: baseUrl + "/api/Usuario/CrearUsuario",
             processData: false,
             contentType: false, // Importante para FormData
             data: formData,
