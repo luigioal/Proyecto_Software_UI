@@ -87,7 +87,7 @@
     }
 
     function cargarAsesores() {
-        const api_url = "http://localhost:5058";
+        const api_url = "https://proyecto-software-2.azurewebsites.net";
         $.ajax({
             url: `${api_url}/api/Usuario/ObtenerAsesoresPorAdmin?idAdmin=1`,
             method: "GET",
