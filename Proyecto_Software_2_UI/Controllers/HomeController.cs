@@ -17,7 +17,7 @@ namespace Proyecto_Software_2_UI.Controllers
             _logger = logger;
         }
 
-        // In your Controller
+        // COnfiguracion de baseUrl dependiendo del ambiente
         [HttpGet("api/config")]
         public IActionResult GetClientConfig()
         {
@@ -25,7 +25,7 @@ namespace Proyecto_Software_2_UI.Controllers
             {
                 baseUrl = _env.IsDevelopment()
                     ? "http://localhost:5058"
-                    : "https://yourapp.azurewebsites.net"
+                    : "https://proyecto-software-2.azurewebsites.net"
             };
             return Ok(config);
         }
