@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = localStorage.getItem('baseUrl');
     // Inicializar validador
     FormValidator.inicializar('form-confirmar-otp');
 
@@ -33,7 +34,6 @@
 
     // Función para generar OTP
     function generarOTP(email) {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Mostrar indicador de carga
         Swal.fire({
@@ -49,7 +49,7 @@
 
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Seguridad/GenerarOTP?email=${encodeURIComponent(email)}`,
+            url: baseUrl + `/api/Seguridad/GenerarOTP?email=${encodeURIComponent(email)}`,
             success: function (response) {
                 console.log("✅ GenerarOTP - Success!", response);
 
@@ -88,8 +88,6 @@
 
     // Función para validar OTP
     function validarOTP() {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
-
         const data = {
             email: document.getElementById('input-correo').value,
             otpCode: document.getElementById('input-otp').value
@@ -119,7 +117,7 @@
 
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Seguridad/ValidarOTP`,
+            url: baseUrl + `/api/Seguridad/ValidarOTP`,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
@@ -148,7 +146,7 @@
                     {
                         $.ajax({
                             method: "POST",
-                            url: `${api_url}/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
+                            url: baseUrl + `/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
                             contentType: "application/json;charset=utf-8"
                         }).done(function (usuario) {
                             console.log("Usuario encontrado:", usuario);
