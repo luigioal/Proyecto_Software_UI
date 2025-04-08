@@ -1,10 +1,10 @@
 ﻿
 document.addEventListener('DOMContentLoaded', function () {
-
+    const baseUrl = localStorage.getItem('baseUrl');
     // Configuración de API endpoints
     const API = {
-        cargosExtra: "https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerCargosExtra",
-        modificarCargosExtra: "https://proyecto-software-2.azurewebsites.net/api/Transaccion/ModificarCargosExtra"
+        cargosExtra: baseUrl + "/api/Transaccion/ObtenerCargosExtra",
+        modificarCargosExtra: baseUrl + "/api/Transaccion/ModificarCargosExtra"
     };
 
     // Estado de la aplicación
