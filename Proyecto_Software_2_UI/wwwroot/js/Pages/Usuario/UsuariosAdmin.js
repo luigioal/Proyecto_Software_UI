@@ -1,5 +1,5 @@
 ﻿// Función para cargar y renderizar los usuarios
-
+const baseUrl = localStorage.getItem('baseUrl');
 let usuarioActualString = sessionStorage.getItem('usuarioActual');
 let usuarioActual = JSON.parse(usuarioActualString);
 const id = usuarioActual.id;
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para obtener los datos de los usuarios
     async function fetchUsuarios() {
         $.ajax({
-            url: "https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuarios",
+            url: baseUrl + "/api/Usuario/ObtenerUsuarios",
             method: "GET",
             contentType: "application/json:charset=utf-8",
             dataType: "json"
@@ -146,14 +146,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const row = document.createElement('div');
             row.className = 'user-mgmt-row';
             row.setAttribute('data-id', usuario.id);
+            row.setAttribute('data-is-inactive', !usuario.estado);
 
 
             // Check if this user should be inactive
-            const isInactive = inactiveUserIds.includes(usuario.id);
-
-            if (isInactive) {
-                row.classList.add('user-row-inactive');
-            }
+            const isInactive = !usuario.estado;
 
             // Apply alternate background for even rows
             if (index % 2 !== 0) {
@@ -164,8 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="user-mgmt-id ${isInactive? 'text-muted' : ''}">${usuario.id}</div>
             <div class="user-mgmt-name ${isInactive ? 'text-muted' : ''}">
                 <div class="user-mgmt-avatar">
-                    <img ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""} 
-                         ${isInactive ? 'style="filter: grayscale(80%); opacity: 0.7;"' : ''}>
+                    <img class="avatar-img" ${usuario.fotoPerfil != 'string' ? 'src="' + usuario.fotoPerfil + '"' : ""} 
+                            ${isInactive ? 'style="filter: grayscale(80%); opacity: 0.7;"' : ''}>
                 </div>
                 ${usuario.nombre + " " + usuario.primerApellido + " " + usuario.segundoApellido}
             </div>
@@ -179,18 +176,21 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="user-mgmt-checkbox-container ${!usuario.estado || isInactive || usuario.id == id ? "opacity-50" : ""}">
                 <span class="user-mgmt-custom-checkbox ${isInactive ? "text-muted" : ""} ${usuario.roles.includes("Cliente") ? "user-mgmt-checkbox-active" : "user-mgmt-checkbox-inactive"} "></span>
             </div>
+
             <div class="user-mgmt-date ${isInactive ? 'text-muted' : ''}">${formatearFecha(usuario.ultimoAcceso)}</div>
-            <div class="user-mgmt-edit-icon">
+
+            <div class="user-mgmt-edit-icon" ${isInactive ? "data-is-inactive='true'" : "data-is-inactive=false"}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${isInactive ? 'fill="#999"' : ''}>
                     <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                 </svg>
             </div>
+
             <div class="user-mgmt-actions-container">
-                <label class="user-mgmt-toggle-switch ${isInactive || usuario.id == id ? 'disabled' : ''}">
-                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""} ${isInactive || usuario.id == id ? 'disabled' : ''}>
-                    <span class="user-mgmt-slider ${isInactive ? 'disabled' : ''}"></span>
+                <label class="user-mgmt-toggle-switch ${usuario.id == id ? 'disabled' : ''}">
+                    <input type="checkbox" class="toggle-activo" ${usuario.estado ? "checked" : ""} ${usuario.id == id ? 'disabled' : ''}>
+                    <span class="user-mgmt-slider ${usuario.id == id ? 'disabled' : ''}"></span>
                 </label>
-                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}" ${isInactive ? 'style="pointer-events: none; opacity: 0.5;"' : ''}}>
+                <div class="user-mgmt-delete-icon" title="Eliminar usuario" data-id="${usuario.id}" }>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${isInactive ? 'fill="#999"' : ''}>
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                     </svg>
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Rest of your event listeners...
         document.querySelectorAll('.user-mgmt-row').forEach(row => {
             const stateReference = row.querySelector('.toggle-activo');
-            if (!stateReference.checked && !row.classList.contains('user-row-inactive')) {
+            if (!stateReference.checked) {
                 row.addEventListener("mouseenter", makeVisible);
                 row.addEventListener('mouseleave', makeInvisible);
             }
@@ -212,15 +212,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Esto para abrir el modal/poUup de Editar Usuario
         document.querySelectorAll('.user-mgmt-edit-icon').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const userId = e.currentTarget.closest('.user-mgmt-row').getAttribute('data-id');
-                //console.log("Editando Usuario ID:", userId);
-
-                // Usar el módulo de edición para cargar el usuario
-                if (window.EditarUsuarioModal) {
-                    window.EditarUsuarioModal.cargarUsuarioParaEditar(userId);
-                }
-            });
+            if (!(btn.getAttribute('data-is-inactive') == 'true')) {
+                btn.addEventListener('click', editarUsuario);
+            }
         });
 
         document.querySelectorAll('.toggle-activo').forEach(toggle => {
@@ -304,10 +298,8 @@ document.addEventListener('DOMContentLoaded', function () {
             focusCancel: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Call API to delete user
-                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `/api/Usuario/EliminarUsuario?idUsuario=${userId}`,
+                    url: baseUrl + `/api/Usuario/EliminarUsuario?idUsuario=${userId}`,
                     method: 'DELETE'
                 }).done(function () {
                     // Remove the row from UI
@@ -377,10 +369,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }).then((result) => {
                 if (result.isConfirmed) {
                     //Enviar instruccion al backend sobre el rol del usuario
-                    var api_url = "https://proyecto-software-2.azurewebsites.net";
                     console.log(userId, roleName);
                     $.ajax({
-                        url: api_url + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
+                        url: baseUrl + `/api/Usuario/ModificarRolesDeUsuario?idUsuario=${userId}&rol=${roleName}`,
                         method: 'PUT'
                     }).done(function () {
                         entity.classList.toggle('user-mgmt-checkbox-active');
@@ -452,21 +443,26 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.isConfirmed) {
                 // Check if the email checkbox is checked (only when activating)
                 const sendEmail = !entity.checked ? false : document.getElementById('send-activation-email')?.checked || false;
+                entity.classList.toggle('user-mgmt-checkbox-active');
 
                 //Enviar instruccion al backend para cambiar estado del usuario
-                var api_url = "https://proyecto-software-2.azurewebsites.net";
                 $.ajax({
-                    url: api_url + `/api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
+                    url: baseUrl + `/api/Usuario/ActivarDesactivarUsuario?idUsuario=${userId}&nuevoEstado=${!entity.checked}&enviarCorreo=${sendEmail}`,
                     method: 'PUT'
                 }).done(function () {
                     entity.checked = !entity.checked;
                     row.querySelectorAll('.user-mgmt-checkbox-container').forEach(checkbox => checkbox.classList.toggle('opacity-50'));
 
                     if (entity.checked) {
+                        row.querySelector('.avatar-img').style.filter = '';
+                        row.querySelector('.avatar-img').style.opacity = '';
+                        row.querySelector('.user-mgmt-edit-icon').addEventListener('click', editarUsuario);
                         row.removeEventListener('mouseenter', makeVisible);
                         row.removeEventListener('mouseleave', makeInvisible);
-                    }
-                    else {
+                    } else {
+                        row.querySelector('.avatar-img').style.filter = 'grayscale(80%)';
+                        row.querySelector('.avatar-img').style.opacity = 'grayscale(0.7%)';
+                        row.querySelector('.user-mgmt-edit-icon').removeEventListener('click', editarUsuario);
                         row.addEventListener('mouseenter', makeVisible);
                         row.addEventListener('mouseleave', makeInvisible);
                     }
@@ -500,6 +496,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             }
         });
+    }
+
+    function editarUsuario(e) {
+        const userId = e.currentTarget.closest('.user-mgmt-row').getAttribute('data-id');
+        //console.log("Editando Usuario ID:", userId);
+
+        // Usar el módulo de edición para cargar el usuario
+        if (window.EditarUsuarioModal) {
+            window.EditarUsuarioModal.cargarUsuarioParaEditar(userId);
+        }
     }
 
     // Exponer fetchUsuarios globalmente para que el modal pueda actualizar la tabla
