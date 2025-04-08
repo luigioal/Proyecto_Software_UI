@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    const baseUrl = localStorage.getItem('baseUrl');
     // Buscar el botón dentro de user-mgmt-panel (o usar el ID)
     const btnRegistrarPanel = document.getElementById('btn-registrar');
     const modalConfirmacion = document.getElementById('modalConfirmacion');
@@ -40,7 +41,6 @@
     }
     // Assignar event listener para revision de correo de asesor
     correoAsesor.addEventListener('focusout', function (e) {
-        let api_url = "https://proyecto-software-2.azurewebsites.net";
         //console.log('Hola me ves');
         //console.log(e.currentTarget.value);
         //$.ajax({
@@ -173,7 +173,7 @@ function RegistroAsesor() {
 
         $.ajax({
             method: "POST",
-            url: api_url + "/api/Usuario/CrearUsuario",
+            url: baseUrl + "/api/Usuario/CrearUsuario",
             processData: false,
             contentType: false,
             data: formData
@@ -198,9 +198,7 @@ function RegistroAsesor() {
 
 function RegistroCliente() {
     this.SubmitRegistroRequest = function () {
-        let idSupervisor = buscar
-
-        let api_url = "https://proyecto-software-2.azurewebsites.net/";
+        let idSupervisor = buscar;
 
         const formData = new FormData();
         formData.append("IdSupervisor", $('#input-').val());
@@ -217,7 +215,7 @@ function RegistroCliente() {
 
         $.ajax({
             method: "POST",
-            url: api_url + "/api/Usuario/CrearUsuario",
+            url: baseUrl + "/api/Usuario/CrearUsuario",
             processData: false,
             contentType: false,
             data: formData
@@ -243,7 +241,7 @@ function RegistroCliente() {
 function buscarSuperDeUsuario(idUsuario) {
     let idSuper = 0;
     $.ajax({
-        url: "https://proyecto-software-2.azurewebsites.net/api/Usuario/BuscarUsuarioPorEmail?",
+        url: baseUrl + "/api/Usuario/BuscarUsuarioPorEmail?",
         method: "GET",
         contentType: "application/json:charset=utf-8",
         dataType: "json"
