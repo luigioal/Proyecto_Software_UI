@@ -4,21 +4,7 @@
         <div class="card shadow">
             <div class="card-body p-5">
                 <h2 class="text-center mb-4 mt-1" style="margin-bottom: 20px">Registrar cliente</h2>
-                <!-- Selector de tipo de usuario -->
-                <div class="user-type-selector mb-4">
-                    <div class="d-flex justify-content-center">
-                        <div class="btn-group role-selector" role="group" aria-label="Seleccionar tipo de usuario">
-                            <input type="radio" class="btn-check" name="userRole" id="roleCliente" value="cliente" autocomplete="off">
-                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleCliente">Cliente</label>
-
-                            <input type="radio" class="btn-check" name="userRole" id="roleAsesor" value="asesor" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleAsesor">Asesor</label>
-
-                            <input type="radio" class="btn-check" name="userRole" id="roleAdmin" value="admin" autocomplete="off">
-                            <label class="btn btn-outline-primary rounded mx-1 btn-custom" for="roleAdmin">Admin</label>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <!-- Registro exitoso -->
                 <div class="alert alert-success d-none" id="modalAlertExito">
@@ -31,11 +17,8 @@
                 </div>
 
                 <form id="registroUsuariosModalForm" data-validacion="auto" enctype="multipart/form-data">
-                    <!-- Campo específicos para Cliente -->
-                    <div class="mb-3">
-                        <label for="modal-correo" class="form-label">Correo electrónico del asesor</label>
-                        <input type="hidden" class="form-control input-email-asesor" id="input-id" required />
-                    </div>
+                    
+                    
 
                     <!-- Nombre -->
                     <div class="mb-3">
