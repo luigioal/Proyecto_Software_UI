@@ -1,16 +1,16 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
-
+const baseUrl = localStorage.getItem('baseUrl');
 let usuarioActualString = sessionStorage.getItem('usuarioActual');
 let usuarioActual = JSON.parse(usuarioActualString);
 const id = usuarioActual.id;
 
 document.addEventListener('DOMContentLoaded', function () {
     const idAsesor = id;
-    console.log(idAsesor);
+    //console.log(idAsesor);
     // Configuración de API endpoints
     const API = {
-        asesorInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
-        clientes: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
+        asesorInfo: baseUrl + `/api/Usuario/ObtenerUsuario?idUsuario=${idAsesor}`,
+        clientes: baseUrl + `/api/Usuario/ObtenerClientesPorAsesor?idAsesor=${idAsesor}`,
         rendimientos: '/api/Rendimiento/ObtenerRendimientoAsesores'
     };
 
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderizarClientes(clientes, numeroActivos, numeroVentas) {
-        console.log(clientes)
+        //console.log(clientes)
         if (!elements.clienteList) return;
 
         if (!clientes || clientes.length === 0) {
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        elements.clienteList.innerHTML = clientes.map(cliente => { console.log("Aqui " + JSON.stringify(cliente)); return generarHtmlCliente(cliente, numeroActivos, numeroVentas) }).join('');
+        elements.clienteList.innerHTML = clientes.map(cliente => { return generarHtmlCliente(cliente, numeroActivos, numeroVentas) }).join('');
     }
 
     function generarHtmlCliente(cliente, numeroInversiones) {
