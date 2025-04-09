@@ -132,7 +132,6 @@ const FormValidator = {
 
     // Inicializar validación en tiempo real para un formulario
     inicializar: function (formId) {
-        console.log("No se encontro nada en los forms.")
         const form = document.getElementById(formId);
         if (!form) { return };
 

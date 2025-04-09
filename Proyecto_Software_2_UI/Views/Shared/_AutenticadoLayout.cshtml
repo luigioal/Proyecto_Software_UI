@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Proyecto_Software_2_UI.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" /> 
+    <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script> 
+    <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -25,9 +25,57 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="@(esUsuario ? "IndexAutenticado" : "Index")"> <img src="~/images/stockflow-title2.png" alt="StockFlow" style="max-width: 150px; height: auto;" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <ul class="navbar-nav">
+                        @* ----------Seleccion de opciones por rol------------------------ *@
+
+                        @* Opciones de Cliente *@
+                        @if (Cliente == "true" || Dev == "true")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Finanza" asp-action="ActividadCliente">Portafolio</a>
+                            </li>
+
+                        }
+
+                        @* Opciones de Asesor *@
+                        @if (Asesor == "true" || Dev == "true")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Finanza" asp-action="ActividadAsesor">Clientes</a>
+                            </li>
+                        }
+
+                        @* Opciones de Admin *@
+                        @if (Admin == "true" || Dev == "true")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Finanza" asp-action="ActividadAdmin">Actividad</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="UsuariosAdmin">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaccion" asp-action="ConfiguracionComisiones">Comisiones</a>
+                            </li>
+                        }
+
+                    </ul>
+                    @* ---------------------------------- *@
+                    @if (esUsuario)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="javascript:void(0);" onclick="cerrarSesion()">Cerrar Sesión</a>
+                            </li>
+                        </ul>
+                    }
+
+                </div>
             </div>
         </nav>
     </header>
@@ -37,8 +85,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted footer-custom">
+        <div class="container footer-custom">
             &copy; 2025 - StockFlow
         </div>
     </footer>
@@ -54,13 +102,11 @@
             const eqPos = cookie.indexOf("=");
             const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-            }
+        }
         }
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await RenderSectionAsync("Styles", required: false)
 </body>

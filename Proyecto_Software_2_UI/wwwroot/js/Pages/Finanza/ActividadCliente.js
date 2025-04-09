@@ -1,5 +1,5 @@
 ﻿// Dashboard Actividad - Script para renderizar información de usuarios
-
+const baseUrl = localStorage.getItem('baseUrl');
 let usuarioActualString = sessionStorage.getItem('usuarioActual');
 let usuarioActual = JSON.parse(usuarioActualString);
 const id = usuarioActual.id;
@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Configuración de API endpoints
     const API = {
-        clienteInfo: `https://proyecto-software-2.azurewebsites.net/api/Usuario/ObtenerUsuario?idUsuario=${idCliente}`,
-        inversionesActivas: `https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Activo`,
-        inversionesVendidas: `https://proyecto-software-2.azurewebsites.net/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Venta`,
+        clienteInfo: baseUrl + `/api/Usuario/ObtenerUsuario?idUsuario=${idCliente}`,
+        inversionesActivas: baseUrl + `/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Activo`,
+        inversionesVendidas: baseUrl + `/api/Transaccion/ObtenerInversiones?idCliente=${idCliente}&Tipo=Venta`,
     };
 
     // Referencias a elementos DOM

@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = localStorage.getItem('baseUrl');
     // Inicializar validador
     FormValidator.inicializar('form-confirmar-otp');
 
@@ -33,7 +34,6 @@
 
     // Función para generar OTP
     function generarOTP(email) {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Mostrar indicador de carga
         Swal.fire({
@@ -49,7 +49,7 @@
 
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Seguridad/GenerarOTP?email=${encodeURIComponent(email)}`,
+            url: baseUrl + `/api/Seguridad/GenerarOTP?email=${encodeURIComponent(email)}`,
             success: function (response) {
                 console.log("✅ GenerarOTP - Success!", response);
 
@@ -76,10 +76,18 @@
         });
     }
 
+    //Funcion para crear cookie 
+    function createBasicCookie(name, value, daysToExpire) {
+        // Create expiration date
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + daysToExpire);
+
+        // Build the cookie string with name=value and expiration
+        document.cookie = `${name}=${value}; path=/; SameSite=Lax; Secure`;
+    }
+
     // Función para validar OTP
     function validarOTP() {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
-
         const data = {
             email: document.getElementById('input-correo').value,
             otpCode: document.getElementById('input-otp').value
@@ -109,7 +117,7 @@
 
         $.ajax({
             method: "POST",
-            url: `${api_url}/api/Seguridad/ValidarOTP`,
+            url: baseUrl + `/api/Seguridad/ValidarOTP`,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
@@ -136,11 +144,9 @@
                         window.location.href = `/Auth/NuevaContrasena?correo=${response.email}`;
                     } else
                     {
-
-
                         $.ajax({
                             method: "POST",
-                            url: `${api_url}/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
+                            url: baseUrl + `/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
                             contentType: "application/json;charset=utf-8"
                         }).done(function (usuario) {
                             console.log("Usuario encontrado:", usuario);
@@ -148,22 +154,26 @@
                             // Guardar el usuario completo en sessionStorage
                             sessionStorage.setItem('usuarioActual', JSON.stringify(usuario));
 
+                            //// Redirigir según el tipo de usuario
+                            //if (usuario.tipo === "Cliente") {
+                            //    window.location.href = "/Finanza/ActividadCliente";
+                            //} else if (usuario.tipo === "Administrador") {
+                            //    window.location.href = "/Finanza/ActividadAdmin";
+                            //} else if (usuario.tipo === "Asesor") {
+                            //    window.location.href = "/Finanza/ActividadAsesor";
+                            //} else {
+                            //    console.log("Tipo de usuario desconocido:", usuario.tipo);
+                            //    //window.location.href = "/Auth/Login"; // Fallback
+                            //}
                             
-                                // Redirigir según el tipo de usuario
-                                if (usuario.tipo === "Cliente") {
-                                    window.location.href = "/Finanza/ActividadCliente";
-                                } else if (usuario.tipo === "Administrador") {
-                                    window.location.href = "/Finanza/ActividadAdmin";
-                                } else if (usuario.tipo === "Asesor") {
-                                    window.location.href = "/Finanza/ActividadAsesor";
-                                } else {
-                                    console.log("Tipo de usuario desconocido:", usuario.tipo);
-                                    //window.location.href = "/Auth/Login"; // Fallback
-                                }
-                            
+                            console.log("Checking on usuario:", usuario);
+                            // Se crea cookie para pasar informacion de rol:
+                            createBasicCookie("Cliente", `${usuario.roles.includes("Cliente") ? "true" : "false"}`, 7); // Cookie que expira en 7 dias
+                            createBasicCookie("Asesor", `${usuario.roles.includes("Asesor") ? "true" : "false"}`, 7); 
+                            createBasicCookie("Admin", `${usuario.roles.includes("Admin") ? "true" : "false"}`, 7); 
+
+                            window.location.href = "/Home/IndexAutenticado";                            
                         });
-
-
 
                     }
 

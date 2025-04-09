@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = localStorage.getItem('baseUrl');
     const form = document.getElementById('form-cambiar-contrasena');
 
     form.addEventListener('submit', function (e) {
@@ -22,10 +23,8 @@
             nuevaContrasena: nuevaContrasena
         };
 
-        let api_url = "https://proyecto-software-2.azurewebsites.net"; 
-
         $.ajax({
-            url: api_url + "/api/Seguridad/CambiarContrasena",
+            url: baseUrl + "/api/Seguridad/CambiarContrasena",
             type: "PUT",
             data: JSON.stringify(payload),
             contentType: "application/json",

@@ -1,4 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    // Referencias a elementos DOM
+    const baseUrl = localStorage.getItem('baseUrl');
     const modalEdicion = document.getElementById('modalEdicionUsuario');
     const btnCerrarModalEditar = document.getElementById('btnCerrarModalEditar');
     const formEditar = document.getElementById('editarUsuarioForm');
@@ -130,10 +132,9 @@
     }
 
     function fetchUsuarioEditar(userId, callback) {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         $.ajax({
-            url: `${api_url}/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
+            url: baseUrl + `/api/Usuario/ObtenerUsuario?idUsuario=${userId}`,
             method: "GET",
             contentType: "application/json",
             dataType: "json",
@@ -152,13 +153,12 @@
     }
 
     function actualizarUsuario(usuario) {
-        const api_url = "https://proyecto-software-2.azurewebsites.net";
 
         // Mostrar indicador de carga
         mostrarCargandoModal("Actualizando usuario...");
 
         $.ajax({
-            url: `${api_url}/api/Usuario/ModificarUsuario`,
+            url: baseUrl + `/api/Usuario/ModificarUsuario`,
             method: "PUT",
             headers: {
                 "Accept": "application/json",
