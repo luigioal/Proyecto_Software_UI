@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Usuarios Admin";
-    Layout = "_AdminLayout";
+    Layout = "_AutenticadoLayout";
 }
 
 @section Styles {
@@ -100,9 +100,6 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 @await Html.PartialAsync("~/Views/Auth/RegistroUsuariosModal.cshtml")
