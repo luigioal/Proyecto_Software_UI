@@ -1,0 +1,92 @@
+﻿<!-- Agregar este HTML después del cierre del div.container -->
+<div id="modalConfirmacion" class="modal-overlay">
+    <div class="modal-content" data-simplebar>
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4 mt-1" style="margin-bottom: 20px">Registrar cliente</h2>
+                
+
+                <!-- Registro exitoso -->
+                <div class="alert alert-success d-none" id="modalAlertExito">
+                    <i class="bi bi-check-circle-fill me-2"></i>Registro realizado con éxito
+                </div>
+
+                <!-- Error de registro -->
+                <div class="alert alert-danger d-none" id="modalAlertError">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Error al intentar registrar
+                </div>
+
+                <form id="registroClienteModalForm" data-validacion="auto" enctype="multipart/form-data">
+                    
+                    
+
+                    <!-- Nombre -->
+                    <div class="mb-3">
+                        <label for="modal-nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="input-nombre-cliente" name="Nombre" required />
+                    </div>
+
+                    <!-- Apellidos -->
+                    <div class="mb-3">
+                        <label for="modal-apellido1" class="form-label">Primer Apellido</label>
+                        <input type="text" class="form-control" id="input-apellido1-cliente" name="Apellido1" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modal-apellido2" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="input-apellido2-cliente" name="Apellido2" required />
+                    </div>
+
+                    <!-- Fecha de nacimiento -->
+                    <div class="mb-3">
+                        <label for="modal-fecha" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" id="input-fecha-cliente" name="FechaNacimiento" required />
+                    </div>
+
+                    <!-- Correo electrónico -->
+                    <div class="mb-3">
+                        <label for="modal-correo" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="input-email-cliente" name="CorreoElectronico" required />
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="mb-3">
+                        <label for="modal-direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="input-direccion-cliente" name="Direccion" />
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="mb-3">
+                        <label for="modal-contrasena" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="input-password-cliente" name="Contrasena" required />
+                    </div>
+
+                    <!-- Foto de perfil -->
+                    <div class="mb-4">
+                        <label for="modal-foto" class="form-label">Foto de perfil</label>
+                        <input type="file" class="form-control" id="input-foto-cliente" name="FotoPerfil" />
+                    </div>
+
+                    <!-- Documento de contrato -->
+                    <div class="mb-4">
+                        <label for="modal-archivo" class="form-label">Archivo de contrato</label>
+                        <input type="file" class="form-control" id="input-archivo-cliente" name="archivo-contrato" />
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" id="btnSubmitRegistroClienteModal" class="btn btn-success btn-lg">Registrar</button>
+                    </div>
+
+                    <!-- Cerrar modal -->
+                    <div class="d-grid">
+                        <button type="button" id="btnCerrarModal-cliente" class="btn btn-outline-secondary">Cancelar</button>
+                    </div>
+
+                    <!-- Campo oculto para tipo de usuario -->
+                    <input type="hidden" id="tipoUsuario" name="TipoUsuario" value="cliente" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

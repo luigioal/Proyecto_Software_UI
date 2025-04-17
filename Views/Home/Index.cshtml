@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Página Principal";
+    Layout = "_AuthLayout";
+} 
+
+<!-- Sección Hero -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h1 class="display-4 fw-bold mb-4">Maximiza tu Potencial de Inversión</h1>
+                <p class="lead mb-4">StockFlow te conecta con asesores profesionales para construir, gestionar y hacer crecer tu portafolio de inversiones con confianza.</p>
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <a href="@Url.Action("Login", "Auth")" class="btn btn-primary btn-lg px-4">Comenzar</a>
+                    <a href="#como-funciona" class="btn btn-outline-secondary btn-lg px-4">Saber Más</a>
+                </div>
+                <img src="~/images/stockflow-logo.png" alt="Logo de StockFlow" class="img-fluid" style="max-width: 450px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Características -->
+<section class="bg-light py-5" id="caracteristicas">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">¿Por Qué Elegir StockFlow?</h2>
+            <p class="lead">Nuestra plataforma ofrece todo lo que necesitas para tener éxito en el mercado actual</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="card-title">Inversión Inteligente</h5>
+                        <p class="card-text">Accede a datos de mercado en tiempo real y análisis para tomar decisiones informadas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h5 class="card-title">Asesores Expertos</h5>
+                        <p class="card-text">Conéctate con asesores financieros profesionales dedicados a tu éxito.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="card-title">Plataforma Segura</h5>
+                        <p class="card-text">Tus inversiones y datos personales están protegidos con seguridad empresarial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección Cómo Funciona -->
+<section class="py-5" id="como-funciona">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Cómo Funciona StockFlow</h2>
+            <p class="lead">Comienza en dos simples pasos</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-4 text-center">
+                <div class="rounded-circle bg-primary text-white step-circle mx-auto mb-3">1</div>
+                <h5>Conéctate con un Asesor</h5>
+                <p>Emparéjate con un asesor profesional que se especialice en tus intereses de inversión.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="rounded-circle bg-primary text-white step-circle mx-auto mb-3">2</div>
+                <h5>Comienza a Invertir</h5>
+                <p>Empieza a construir tu portafolio con orientación personalizada y monitoreo en tiempo real.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold mb-4">¿Listo para hacer crecer tus inversiones?</h2>
+                <p class="lead mb-4">Únete a miles de inversores que confían en StockFlow para lograr sus objetivos financieros.</p>
+                <a href="@Url.Action("Login", "Auth")" class="btn btn-light btn-lg px-5">Comenzar Ahora</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CSS Adicional para nuevos elementos -->
+<style>
+    .hero-section {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+    }
+
+    .step-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #33384D;
+        border-color: #33384D;
+    }
+
+        .btn-primary:hover {
+            background-color: #282c3e;
+            border-color: #282c3e;
+        }
+
+    .text-primary {
+        color: #33384D !important;
+    }
+
+    .bg-primary {
+        background-color: #33384D !important;
+    }
+</style>

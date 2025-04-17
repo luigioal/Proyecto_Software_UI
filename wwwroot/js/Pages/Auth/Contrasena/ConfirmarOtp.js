@@ -1,0 +1,199 @@
+﻿document.addEventListener('DOMContentLoaded', () => {
+    const baseUrl = localStorage.getItem('baseUrl');
+    // Inicializar validador
+    FormValidator.inicializar('form-confirmar-otp');
+
+    // Obtener el correo del input hidden
+    const email = document.getElementById('input-correo').value;
+    console.log("Email encontrado:", email);
+    
+
+    // Generar OTP automáticamente al cargar la página (solo una vez, no duplicar)
+    if (email) {
+        // Pequeño retraso para asegurar que todo está listo
+        setTimeout(() => {
+            console.log("Generando OTP para:", email);
+            generarOTP(email);
+        }, 500);
+    }
+
+    // Manejar el envío del formulario
+    document.getElementById("form-confirmar-otp").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (FormValidator.validarFormulario('form-confirmar-otp')) {
+            validarOTP();
+        } else {
+            Swal.fire({
+                title: "Campos incompletos",
+                text: "Por favor, completa todos los campos requeridos.",
+                icon: "warning"
+            });
+        }
+    });
+
+    // Función para generar OTP
+    function generarOTP(email) {
+
+        // Mostrar indicador de carga
+        Swal.fire({
+            title: "Generando código",
+            text: "Estamos enviando un código a tu correo...",
+            icon: "info",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            method: "POST",
+            url: baseUrl + `/api/Seguridad/GenerarOTP?email=${encodeURIComponent(email)}`,
+            success: function (response) {
+                console.log("✅ GenerarOTP - Success!", response);
+
+                Swal.fire({
+                    title: "Código enviado",
+                    text: "Hemos enviado un código de verificación a tu correo electrónico.",
+                    icon: "success",
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                // Enfocar el campo de OTP para mejorar la experiencia
+                document.getElementById('input-otp').focus();
+            },
+            error: function (error) {
+                console.error("❌ GenerarOTP - ERROR:", error);
+
+                Swal.fire({
+                    title: "Error",
+                    text: "No pudimos generar el código de verificación. Intenta nuevamente.",
+                    icon: "error"
+                });
+            }
+        });
+    }
+
+    //Funcion para crear cookie 
+    function createBasicCookie(name, value, daysToExpire) {
+        // Create expiration date
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + daysToExpire);
+
+        // Build the cookie string with name=value and expiration
+        document.cookie = `${name}=${value}; path=/; SameSite=Lax; Secure`;
+    }
+
+    // Función para validar OTP
+    function validarOTP() {
+        const data = {
+            email: document.getElementById('input-correo').value,
+            otpCode: document.getElementById('input-otp').value
+        };
+
+        // Validar campos antes de enviar
+        if (!data.email || !data.otpCode) {
+            Swal.fire({
+                title: "Datos faltantes",
+                text: "Correo electrónico y código OTP son requeridos.",
+                icon: "warning"
+            });
+            return;
+        }
+
+        // Mostrar indicador de carga
+        Swal.fire({
+            title: "Verificando",
+            text: "Estamos verificando tu código...",
+            icon: "info",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            method: "POST",
+            url: baseUrl + `/api/Seguridad/ValidarOTP`,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data)
+        }).done(function (response) {
+            console.log("ValidarOTP - Success!", response);
+
+            if (response.success) {
+                // Guardar el correo en sessionStorage para uso en otras pantallas
+                sessionStorage.setItem('userEmail', response.email);
+
+                // Determinar la redirección basada en el origen
+                const urlParams = new URLSearchParams(window.location.search);
+                const origen = urlParams.get('origen');
+
+                Swal.fire({
+                    title: "Código verificado",
+                    text: "Verificación exitosa.",
+                    icon: "success"
+                }).then(() => {
+                    if (origen === 'recuperar') {
+                        window.location.href = `/Auth/NuevaContrasena?correo=${response.email}`;
+                    } else
+                    {
+                        $.ajax({
+                            method: "POST",
+                            url: baseUrl + `/api/Usuario/BuscarUsuarioPorEmail?email=${encodeURIComponent(response.email)}`,
+                            contentType: "application/json;charset=utf-8"
+                        }).done(function (usuario) {
+                            console.log("Usuario encontrado:", usuario);
+
+                            // Guardar el usuario completo en sessionStorage
+                            sessionStorage.setItem('usuarioActual', JSON.stringify(usuario));
+
+                            //// Redirigir según el tipo de usuario
+                            //if (usuario.tipo === "Cliente") {
+                            //    window.location.href = "/Finanza/ActividadCliente";
+                            //} else if (usuario.tipo === "Administrador") {
+                            //    window.location.href = "/Finanza/ActividadAdmin";
+                            //} else if (usuario.tipo === "Asesor") {
+                            //    window.location.href = "/Finanza/ActividadAsesor";
+                            //} else {
+                            //    console.log("Tipo de usuario desconocido:", usuario.tipo);
+                            //    //window.location.href = "/Auth/Login"; // Fallback
+                            //}
+                            
+                            console.log("Checking on usuario:", usuario);
+                            // Se crea cookie para pasar informacion de rol:
+                            createBasicCookie("Cliente", `${usuario.roles.includes("Cliente") ? "true" : "false"}`, 7); // Cookie que expira en 7 dias
+                            createBasicCookie("Asesor", `${usuario.roles.includes("Asesor") ? "true" : "false"}`, 7); 
+                            createBasicCookie("Admin", `${usuario.roles.includes("Admin") ? "true" : "false"}`, 7); 
+
+                            window.location.href = "/Home/IndexAutenticado";                            
+                        });
+
+                    }
+
+                     
+                });
+            } else {
+                Swal.fire({
+                    title: "Código inválido",
+                    text: response.message || "El código ingresado no es válido. Verifica e intenta nuevamente.",
+                    icon: "error"
+                });
+            }
+        }).fail(function (error) {
+            console.error("❌ ValidarOTP - ERROR:", error);
+
+            Swal.fire({
+                title: "Error del servidor",
+                text: "No se pudo validar el código. Intenta nuevamente.",
+                icon: "error"
+            });
+        });
+    }
+});

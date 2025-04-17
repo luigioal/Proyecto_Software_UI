@@ -1,0 +1,28 @@
+﻿.container-auth {
+    margin: 8%;
+}
+
+.container-otp {
+    margin-top: 15%;
+    margin-bottom: 20%;
+}
+
+.container-contrasena {
+    margin-top: 20%;
+    margin-bottom: 20%;
+}
+
+.btn-custom {
+    background-color: #33384D;
+}
+
+.btn-custom:hover {
+    outline: none;
+    background-color: #33384D;
+}
+
+.footer-custom {
+    background-color: #FFFFFF;
+    height: 100px;
+    margin: 0px;
+}

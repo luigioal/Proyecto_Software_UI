@@ -1,0 +1,117 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Proyecto_Software_2_UI
+build_property.RootNamespace = Proyecto_Software_2_UI
+build_property.ProjectDir = C:\Repositories\Proyecto_Software_2_UI\Proyecto_Software_2_UI\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Repositories\Proyecto_Software_2_UI\Proyecto_Software_2_UI
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/ConfirmarOTP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxDb25maXJtYXJPVFAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/NuevaContrasena.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxOdWV2YUNvbnRyYXNlbmEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/RecuperarContrasena.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWN1cGVyYXJDb250cmFzZW5hLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/RegistroAsesor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Ryb0FzZXNvci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/RegistroClienteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Ryb0NsaWVudGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Auth/RegistroUsuariosModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Ryb1VzdWFyaW9zTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Finanza/ActividadAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW56YVxBY3RpdmlkYWRBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Finanza/ActividadAsesor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW56YVxBY3RpdmlkYWRBc2Vzb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Finanza/ActividadCliente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW56YVxBY3RpdmlkYWRDbGllbnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Home/IndexAutenticado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleEF1dGVudGljYWRvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_AsesorLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Bc2Vzb3JMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_AutenticadoLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BdXRlbnRpY2Fkb0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_AuthLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BdXRoTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_ClienteLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9DbGllbnRlTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Transaccion/ConfiguracionComisiones.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNhY2Npb25cQ29uZmlndXJhY2lvbkNvbWlzaW9uZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Usuario/UsuariosAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xVc3Vhcmlvc0FkbWluLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Repositories/Proyecto_Software_2_UI/Proyecto_Software_2_UI/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-4d0setglr3
