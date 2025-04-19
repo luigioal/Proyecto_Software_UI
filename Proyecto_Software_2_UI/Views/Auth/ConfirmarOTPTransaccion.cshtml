@@ -1,0 +1,85 @@
+﻿@model Proyecto_Software_2_UI.Models.Transaccion.ConfirmacionOTPViewModel
+@{
+    ViewData["Title"] = "Confirmar OTP";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Verificación de seguridad</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+                        </div>
+                    }
+
+                    <p class="text-center">Hemos enviado un código de verificación a su correo electrónico para validar esta transacción.</p>
+
+                    <div class="alert alert-info">
+                        <div>Tipo de operación: <strong>@(Model.Operacion == "retiro" ? "Retiro" : "Depósito")</strong></div>
+                        <div>Monto: <strong>$@Model.Monto.ToString("N2")</strong></div>
+                    </div>
+
+                    <form asp-controller="Payment" asp-action="ConfirmarTransaccion" method="post">
+                        <input type="hidden" asp-for="Operacion" />
+                        <input type="hidden" asp-for="Monto" />
+
+                        <div class="mb-4">
+                            <label asp-for="OTP" class="form-label">Código OTP:</label>
+                            <input asp-for="OTP" type="text" class="form-control form-control-lg text-center"
+                                   maxlength="6" autocomplete="off" placeholder="Ingrese el código de 6 dígitos" required />
+                            <span asp-validation-for="OTP" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Confirmar</button>
+                            <a asp-controller="Finanza" asp-action="ActividadCliente" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+
+                        <div class="mt-3 text-center">
+                            <a href="#" id="reenviar-otp">Reenviar código</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Manejar el reenvío de OTP
+        document.getElementById('reenviar-otp').addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            try {
+                const operacion = '@Model.Operacion';
+                const endpoint = operacion === 'retiro' ? 'IniciarRetiro' : 'IniciarDeposito';
+
+                const response = await fetch(`/api/Transaccion/${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        monto: @Model.Monto
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Se ha enviado un nuevo código a su correo electrónico');
+                } else {
+                    const error = await response.text();
+                    alert(`Error: ${error}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        });
+    </script>
+}

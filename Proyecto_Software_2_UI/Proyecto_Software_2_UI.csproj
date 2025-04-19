@@ -10,4 +10,20 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AppLogic">
+      <HintPath>..\..\Proyecto_Software_2\AppLogic\bin\Debug\net8.0\AppLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>..\..\Proyecto_Software_2\AppLogic\bin\Debug\net8.0\DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="DTO">
+      <HintPath>..\..\Proyecto_Software_2\AppLogic\bin\Debug\net8.0\DTO.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

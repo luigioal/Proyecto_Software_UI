@@ -1,0 +1,99 @@
+﻿@model Proyecto_Software_2_UI.Models.Transaccion.DepositoViewModel
+
+@{
+    ViewData["Title"] = "Depositar Fondos";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Depositar Fondos</h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+                        </div>
+                    }
+
+                    <form id="depositForm" asp-controller="Payment" asp-action="ProcessDeposit" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Monto" class="form-label">Monto a depositar:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Monto" type="number" class="form-control" min="5" step="0.01" required>
+                            </div>
+                            <span asp-validation-for="Monto" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Comisión de plataforma:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="comisionPlataforma" value="@Model.ComisionPlataforma" readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Comisión de reserva:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="comisionReserva" value="@Model.ComisionReserva" readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Comisión PayPal (%):</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="comisionPaypal" value="@Model.ComisionPaypal" readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Total a depositar:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="total" readonly>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Depositar con PayPal</button>
+                            <a asp-controller="Finanza" asp-action="ActividadCliente" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Cálculos en tiempo real
+        document.getElementById('Monto').addEventListener('input', calcularTotal);
+
+        function calcularTotal() {
+            const monto = parseFloat(document.getElementById('Monto').value) || 0;
+            const comisionPlataforma = @Model.ComisionPlataforma;
+            const comisionReserva = @Model.ComisionReserva;
+            const comisionPaypalPorcentaje = @Model.ComisionPaypal;
+
+            const comisionPaypal = monto * (comisionPaypalPorcentaje / 100);
+            const total = monto + comisionPlataforma + comisionReserva + comisionPaypal;
+
+            document.getElementById('comisionPaypal').value = comisionPaypal.toFixed(2);
+            document.getElementById('total').value = total.toLocaleString('es-ES', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Inicializar cálculo al cargar la página
+        document.addEventListener('DOMContentLoaded', calcularTotal);
+    </script>
+}
