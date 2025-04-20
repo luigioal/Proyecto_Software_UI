@@ -1,3 +1,7 @@
+using AppLogic.SeguridadAdmin;
+using AppLogic.TransaccionAdmin;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace Proyecto_Software_2_UI
 {
     public class Program
@@ -9,12 +13,19 @@ namespace Proyecto_Software_2_UI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
-            builder.Services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            builder.Services.AddScoped<TransaccionAdmin>();
+            builder.Services.AddScoped<Notificador>();
+            builder.Services.AddScoped<SeguridadAdmin>();
+
+            // Configuración de autenticación 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/Login";
+                    options.AccessDeniedPath = "/Auth/Error";
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Tiempo de expiración
+                });
 
             var app = builder.Build();
 
@@ -23,10 +34,13 @@ namespace Proyecto_Software_2_UI
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

@@ -1,5 +1,5 @@
-﻿// En Proyecto_Software_2_UI/Controllers/PaymentController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -13,6 +13,7 @@ using System.Security.Claims;
 
 namespace Proyecto_Software_2_UI.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -21,118 +22,32 @@ namespace Proyecto_Software_2_UI.Controllers
         private readonly Notificador _notificador;
         private readonly SeguridadAdmin _seguridadAdmin;
 
-
-        public PaymentController(IHttpClientFactory httpClientFactory)
+        public PaymentController(
+            IHttpClientFactory httpClientFactory,
+            TransaccionAdmin transaccionAdmin,
+            Notificador notificador,
+            SeguridadAdmin seguridadAdmin)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _baseUrl = "http://localhost:5058"; // Ajusta esto a la URL de tu API
-
+            _baseUrl = "http://localhost:5058";
+            _transaccionAdmin = transaccionAdmin;
+            _notificador = notificador;
+            _seguridadAdmin = seguridadAdmin;
         }
 
-        // GET: Payment/Withdraw
-        public async Task<IActionResult> Withdraw()
+        // GET: Payment/Deposit
+        public IActionResult Deposit()
         {
-            try
+            var viewModel = new DepositoViewModel
             {
-                // Obtener cargos extra de la API
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Transaccion/ObtenerCargosExtra");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var cargosExtra = JsonConvert.DeserializeObject<dynamic>(content);
-
-                    var viewModel = new RetiroViewModel
-                    {
-                        ComisionPlataforma = cargosExtra.ComisionTransaccion,
-                        ComisionReserva = cargosExtra.ComisionAsesor,
-                        ComisionPaypal = cargosExtra.TarifaMinimaTransaccion
-                    };
-
-                    return View(viewModel);
-                }
-
-                TempData["Error"] = "No se pudieron obtener los datos de comisiones";
-                return RedirectToAction("ActividadCliente", "Finanza");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = $"Error: {ex.Message}";
-                return RedirectToAction("ActividadCliente", "Finanza");
-            }
-        }
-
-        // POST: Payment/IniciarRetiro
-        [HttpPost]
-        public async Task<IActionResult> IniciarRetiro(RetiroViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("Withdraw", model);
-            }
-
-            try
-            {
-                // Obtener ID del usuario de la sesión
-                int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-
-                var requestData = new
-                {
-                    IdUsuario = userId,
-                    Monto = (double)model.Monto
-                };
-
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{_baseUrl}/api/Transaccion/IniciarRetiro", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Guardar monto en TempData para usarlo en la confirmación
-                    TempData["MontoRetiro"] = model.Monto;
-                    TempData["OperacionTipo"] = "retiro";
-
-                    // Redirigir a la página de confirmación OTP
-                    return RedirectToAction("ConfirmarOTP");
-                }
-
-                var errorContent = await response.Content.ReadAsStringAsync();
-                TempData["Error"] = errorContent;
-                return View("Withdraw", model);
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = $"Error: {ex.Message}";
-                return View("Withdraw", model);
-            }
-        }
-
-        // GET: Payment/ConfirmarOTP
-        public IActionResult ConfirmarOTP()
-        {
-            // Verificar si hay un proceso de transacción en curso
-            if (TempData["MontoRetiro"] == null && TempData["MontoDeposito"] == null)
-            {
-                return RedirectToAction("ActividadCliente", "Finanza");
-            }
-
-            var viewModel = new ConfirmacionOTPViewModel
-            {
-                Monto = TempData["MontoRetiro"] != null
-                    ? Convert.ToDecimal(TempData["MontoRetiro"])
-                    : Convert.ToDecimal(TempData["MontoDeposito"]),
-
-                Operacion = TempData["OperacionTipo"]?.ToString()
+                ComisionPlataforma = 46.8,
+                ComisionPaypal = 6
             };
-
-            // Mantener los valores en TempData para el post
-            TempData.Keep("MontoRetiro");
-            TempData.Keep("MontoDeposito");
-            TempData.Keep("OperacionTipo");
-
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessDeposit(DepositoViewModel model)
         {
             if (!ModelState.IsValid)
@@ -140,28 +55,13 @@ namespace Proyecto_Software_2_UI.Controllers
 
             try
             {
-                // Obtener ID del usuario de la sesión (con validación)
-                if (!HttpContext.User.Identity.IsAuthenticated)
-                {
-                    TempData["Error"] = "Usuario no autenticado";
-                    return RedirectToAction("Login", "Account");
-                }
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var email = User.Identity.Name;
 
-                // Obtener el ID del usuario (ajusta según tu sistema de autenticación)
-                var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
-                {
-                    TempData["Error"] = "No se pudo obtener el ID de usuario";
-                    return RedirectToAction("Login", "Account");
-                }
-
-                // Generar OTP
-                var userEmail = HttpContext.User.Identity.Name; // Asume que el email está en el claim Name
-                string otp = await _seguridadAdmin.GenerateOTP(userEmail);
-
-                // Guardar datos temporales
                 TempData["MontoDeposito"] = model.Monto;
                 TempData["OperacionTipo"] = "deposito";
+
+                await _seguridadAdmin.GenerateOTP(email);
 
                 return RedirectToAction("ConfirmarOTP");
             }
@@ -172,69 +72,67 @@ namespace Proyecto_Software_2_UI.Controllers
             }
         }
 
-        // POST: Payment/ConfirmarTransaccion
+        // GET: Payment/ConfirmarOTP
+        public IActionResult ConfirmarOTP()
+        {
+            if (TempData["MontoRetiro"] == null && TempData["MontoDeposito"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var viewModel = new ConfirmacionOTPViewModel
+            {
+                Monto = TempData["MontoRetiro"] != null
+                    ? Convert.ToDecimal(TempData["MontoRetiro"])
+                    : Convert.ToDecimal(TempData["MontoDeposito"]),
+                Operacion = TempData["OperacionTipo"]?.ToString()
+            };
+
+            TempData.Keep();
+            return View(viewModel);
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmarTransaccion(ConfirmacionOTPViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View("ConfirmarOTP", model);
-            }
 
             try
             {
-                // Obtener datos de TempData
-                decimal monto = 0;
-                string operacion = model.Operacion;
-
-                if (operacion == "retiro" && TempData["MontoRetiro"] != null)
+                var email = User.Identity.Name;
+                if (!_seguridadAdmin.Verify(email, model.OTP))
                 {
-                    monto = Convert.ToDecimal(TempData["MontoRetiro"]);
+                    TempData["Error"] = "OTP inválido";
+                    return View("ConfirmarOTP", model);
                 }
-                else if (operacion == "deposito" && TempData["MontoDeposito"] != null)
+
+                int userId;
+                if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out userId))
                 {
-                    monto = Convert.ToDecimal(TempData["MontoDeposito"]);
+                    TempData["Error"] = "Error al obtener el ID del usuario.";
+                    return View("ConfirmarOTP", model);
+                }
+
+                if (model.Operacion == "deposito")
+                {
+                    _transaccionAdmin.ProcesarDeposito(
+                        userId,
+                         Convert.ToDouble(model.Monto)
+                    );
+                    TempData["Success"] = "Depósito exitoso";
                 }
                 else
                 {
-                    TempData["Error"] = "Los datos de la transacción no son válidos";
-                    return RedirectToAction("ActividadCliente", "Finanza");
+                    _transaccionAdmin.ProcesarRetiro(
+                        userId,
+                        Convert.ToDouble(model.Monto)
+                    );
+                    TempData["Success"] = "Retiro exitoso";
                 }
 
-                // Obtener ID del usuario de la sesión
-                int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-
-                var requestData = new
-                {
-                    IdUsuario = userId,
-                    Monto = (double)monto,
-                    OTP = model.OTP
-                };
-
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-
-                // Llamar al endpoint correspondiente según la operación
-                var endpoint = operacion == "retiro" ? "ConfirmarRetiro" : "ConfirmarDeposito";
-                var response = await _httpClient.PostAsync($"{_baseUrl}/api/Transaccion/{endpoint}", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["Exito"] = operacion == "retiro"
-                        ? "Retiro procesado exitosamente"
-                        : "Depósito procesado exitosamente";
-
-                    return RedirectToAction("ActividadCliente", "Finanza");
-                }
-
-                var errorContent = await response.Content.ReadAsStringAsync();
-                TempData["Error"] = errorContent;
-
-                // Mantener los datos para reintentar
-                TempData.Keep("MontoRetiro");
-                TempData.Keep("MontoDeposito");
-                TempData.Keep("OperacionTipo");
-
-                return View("ConfirmarOTP", model);
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
