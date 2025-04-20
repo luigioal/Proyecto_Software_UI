@@ -24,5 +24,20 @@ namespace Proyecto_Software_2_UI.Controllers
             //ViewData["Layout"] = "_AsesorLayout";
             return View();
         }
+
+        public IActionResult MercadoTab()
+        {
+
+            //ViewData["Layout"] = "_ClienteLayout";
+            return View();
+        }
+
+        public IActionResult BalanceTabSimplificado()
+        {
+
+            //ViewData["Layout"] = "_ClienteLayout";
+            return View();
+        }
+
     }
 }
